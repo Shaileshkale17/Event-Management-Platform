@@ -1,9 +1,44 @@
 import React, { useState } from "react";
 import logo from "../assets/Logo.png";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/slices/authSlice";
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [Email, setEmail] = useState("");
+  const [Password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const loginAuth = async (e) => {
+    e.preventDefault();
+
+    if (!(Email && Password)) {
+      return toast.error("Please enter Email and Password");
+    }
+
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/users/login`,
+        { Email, Password }
+      );
+
+      const info = {
+        token: res.data.token,
+        user: res.data.user,
+      };
+      toast.success("Login successful");
+      dispatch(login(info));
+      window.location.replace("/dashboard-user");
+      console.log("Login response:", info);
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        "Something went wrong. Please try again.";
+      toast.error(errorMessage);
+      console.error("Login error:", error);
+    }
+  };
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#00000015] px-16">
       <div className="bg-white rounded-lg shadow-md flex overflow-hidden w-7xl ">
@@ -19,7 +54,7 @@ const Login = () => {
         <div className="flex-1 p-8">
           <h2 className="text-2xl font-bold text-blue-800 mb-2">Login</h2>
           <p className="text-sm text-gray-600 mb-6">Please login to continue</p>
-          <form>
+          <form onSubmit={loginAuth}>
             <div className="mb-4">
               <label
                 htmlFor="email"
@@ -30,7 +65,7 @@ const Login = () => {
                 type="email"
                 id="email"
                 onChange={(e) => setEmail(e.target.value)}
-                value={email}
+                value={Email}
                 placeholder="Enter your email"
                 className="mt-1 block w-full px-4 py-2 border rounded-md text-sm shadow-sm focus:ring focus:ring-blue-200 focus:outline-none"
               />
@@ -45,7 +80,7 @@ const Login = () => {
                 type="password"
                 id="password"
                 onChange={(e) => setPassword(e.target.value)}
-                value={password}
+                value={Password}
                 placeholder="Enter your password"
                 className="mt-1 block w-full px-4 py-2 border rounded-md text-sm shadow-sm focus:ring focus:ring-blue-200 focus:outline-none"
               />

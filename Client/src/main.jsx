@@ -15,7 +15,8 @@ import AddEvents from "./Pages/AddEvents";
 import About from "./Pages/About";
 import Contact_us_ from "./Pages/Contact_us_";
 import EmployeeList from "./Pages/Test";
-
+import { Provider } from "react-redux";
+import store from "./redux/store";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -75,6 +76,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </StrictMode>
 );

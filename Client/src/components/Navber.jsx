@@ -1,10 +1,22 @@
 import React from "react";
 import logo_icon from "../assets/Logo.png";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/slices/authSlice";
+import { toast } from "react-toastify";
+
 const Navber = () => {
+  const dispatch = useDispatch();
+  const { isLoggedIn } = useSelector((state) => state.auth);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    toast.success("Logged out successfully"); // Notify the user
+  };
+
   return (
-    <div className="absolute z-30 w-full px-16  mt-4">
-      <nav className="flex flex-row justify-between border-white p-4 rounded-2xl bg-[#28475cac]  text-white">
+    <div className="absolute z-30 w-full px-16 mt-4">
+      <nav className="flex flex-row justify-between border-white p-4 rounded-2xl bg-[#28475cac] text-white">
         <div>
           <Link to="/">
             <img src={logo_icon} alt="Logoicon" className="w-7 h-7" />
@@ -34,9 +46,15 @@ const Navber = () => {
           </li>
         </ul>
         <div>
-          <Link to="/login">
-            <button>Sign In</button>
-          </Link>
+          {isLoggedIn ? (
+            <button className="cursor-pointer" onClick={handleLogout}>
+              Logout
+            </button>
+          ) : (
+            <Link to="/login">
+              <button className="cursor-pointer">Sign In</button>
+            </Link>
+          )}
         </div>
       </nav>
     </div>

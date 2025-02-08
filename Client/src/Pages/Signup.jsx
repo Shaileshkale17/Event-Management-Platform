@@ -1,7 +1,50 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../assets/Logo.png";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import axios from "axios";
 const Signup = () => {
+  const [FullName, setFullName] = useState("");
+  const [Email, setEmail] = useState("");
+  const [Password, setPassword] = useState("");
+  const [confirmPassword, setconfirmPassword] = useState("");
+  const SignupAuth = async (e) => {
+    e.preventDefault();
+
+    if (Password !== confirmPassword) {
+      return toast.error("Passwords do not match.");
+    }
+    if (!(Email && Password && FullName)) {
+      return toast.error("Please fill out all required fields.");
+    }
+
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/users`,
+        { Email, Password, FullName }
+      );
+
+      const info = {
+        token: res.data.token,
+        user: res.data.user,
+      };
+
+      toast.success("Signup successful.");
+      // dispatch(login(info));
+      setEmail("");
+      setFullName("");
+      setPassword("");
+
+      window.location.replace("/login");
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        "Something went wrong. Please try again.";
+      toast.error(errorMessage);
+      console.error("Signup error:", error);
+    }
+  };
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#00000015] px-16">
       <div className="bg-white rounded-lg shadow-md flex overflow-hidden w-7xl ">
@@ -25,7 +68,7 @@ const Signup = () => {
           <p className="text-sm text-gray-600 mb-6">
             Please Signup to continue
           </p>
-          <form>
+          <form onSubmit={SignupAuth}>
             <div className="mb-4">
               <label
                 htmlFor="name"
@@ -37,6 +80,8 @@ const Signup = () => {
                 id="name"
                 placeholder="Enter your Full Nmae"
                 className="mt-1 block w-full px-4 py-2 border rounded-md text-sm shadow-sm focus:ring focus:ring-blue-200 focus:outline-none"
+                onChange={(e) => setFullName(e.target.value)}
+                value={FullName}
               />
             </div>
             <div className="mb-4">
@@ -50,6 +95,7 @@ const Signup = () => {
                 id="email"
                 placeholder="Enter your email"
                 className="mt-1 block w-full px-4 py-2 border rounded-md text-sm shadow-sm focus:ring focus:ring-blue-200 focus:outline-none"
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="mb-4">
@@ -63,6 +109,8 @@ const Signup = () => {
                 id="password"
                 placeholder="Enter your password"
                 className="mt-1 block w-full px-4 py-2 border rounded-md text-sm shadow-sm focus:ring focus:ring-blue-200 focus:outline-none"
+                onChange={(e) => setPassword(e.target.value)}
+                value={Password}
               />
             </div>
             <div className="mb-4">
@@ -76,12 +124,9 @@ const Signup = () => {
                 id="confirm_password"
                 placeholder="Enter your confirm password"
                 className="mt-1 block w-full px-4 py-2 border rounded-md text-sm shadow-sm focus:ring focus:ring-blue-200 focus:outline-none"
+                onChange={(e) => setconfirmPassword(e.target.value)}
+                value={confirmPassword}
               />
-            </div>
-            <div className="flex items-center justify-between flex-row-reverse mb-6">
-              <a href="#" className="text-sm text-blue-600 hover:underline">
-                Forgot Password?
-              </a>
             </div>
             <button
               type="submit"

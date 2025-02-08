@@ -9,10 +9,8 @@ import {
 import { authenticateToken } from "../Middlewares/authMiddleware.js";
 const router = express.Router();
 
-router.post(
-  "/messages",
-  authenticateToken(["User", "employee", "admin", "subadmin"]),
-  (req, res) => createMessage(req, res, req.app.locals.io)
+router.post("/messages", (req, res) =>
+  createMessage(req, res, req.app.locals.io)
 );
 router.get(
   "/messages",

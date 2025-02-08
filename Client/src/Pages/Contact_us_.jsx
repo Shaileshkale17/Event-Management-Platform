@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import images from "../assets/handshake-4002834_1280.jpg";
 import searchIcon from "../assets/find.png";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import axios from "axios";
+
 const Contact_us_ = () => {
   const eventTypes = [
     "--Select--",
@@ -11,6 +14,52 @@ const Contact_us_ = () => {
     "Birthday",
     "Other",
   ];
+  const [FirstName, setFirstName] = useState("");
+  const [LastName, setLastName] = useState("");
+  const [Email, setEmail] = useState("");
+  const [Phone, setPhone] = useState("");
+  const [enquiry, setenquiry] = useState("");
+  const [Messages, setMessages] = useState("");
+
+  const ContectMessage = async (e) => {
+    e.preventDefault();
+
+    if (!(FirstName && LastName && Email && Phone && enquiry && Messages)) {
+      return toast.error("Please fill out all required fields.");
+    }
+
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/messages`,
+        {
+          FirstName,
+          LastName,
+          Email,
+          Phone,
+          enquiry,
+          Messages,
+        }
+      );
+
+      toast.success("Signup successful.");
+      // dispatch(login(info));
+      console.log("Signup response:", res);
+
+      // window.location.replace("/login");
+      setFirstName("");
+      setEmail("");
+      setLastName("");
+      setMessages("");
+      setPhone("");
+      setenquiry("");
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        "Something went wrong. Please try again.";
+      toast.error(errorMessage);
+      console.error("Signup error:", error);
+    }
+  };
 
   return (
     <div className="min-h-screen ">
@@ -47,17 +96,21 @@ const Contact_us_ = () => {
 
           {/* Right Section */}
           <div className="w-full md:w-1/2 p-8">
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={ContectMessage}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <input
                   type="text"
                   placeholder="First Name"
                   className="border border-gray-300 p-2 rounded-lg w-full"
+                  onChange={(e) => setFirstName(e.target.value)}
+                  value={FirstName}
                 />
                 <input
                   type="text"
                   placeholder="Last Name"
                   className="border border-gray-300 p-2 rounded-lg w-full"
+                  onChange={(e) => setLastName(e.target.value)}
+                  value={LastName}
                 />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -65,11 +118,15 @@ const Contact_us_ = () => {
                   type="email"
                   placeholder="Email"
                   className="border border-gray-300 p-2 rounded-lg w-full"
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={Email}
                 />
                 <input
                   type="text"
                   placeholder="Phone Number"
                   className="border border-gray-300 p-2 rounded-lg w-full"
+                  onChange={(e) => setPhone(e.target.value)}
+                  value={Phone}
                 />
               </div>
               <div>
@@ -79,6 +136,8 @@ const Contact_us_ = () => {
                 <select
                   name="select"
                   id="select"
+                  onChange={(e) => setenquiry(e.target.value)}
+                  value={enquiry}
                   className="border border-gray-300 p-2 rounded-lg w-full">
                   {eventTypes.map((item) => (
                     <option value={item}>{item}</option>
@@ -88,6 +147,8 @@ const Contact_us_ = () => {
               <textarea
                 placeholder="Write your message..."
                 rows="5"
+                onChange={(e) => setMessages(e.target.value)}
+                value={Messages}
                 className="border border-gray-300 p-2 rounded-lg w-full"></textarea>
               <button
                 type="submit"
