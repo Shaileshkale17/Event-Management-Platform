@@ -1,6 +1,6 @@
 import React from "react";
 import logo_icon from "../assets/Logo.png";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/slices/authSlice";
 import { toast } from "react-toastify";
@@ -8,9 +8,11 @@ import { toast } from "react-toastify";
 const Navber = () => {
   const dispatch = useDispatch();
   const { isLoggedIn } = useSelector((state) => state.auth);
+
   const data = useSelector((state) => state.auth);
   const handleLogout = () => {
     dispatch(logout());
+    window.location.replace("/");
     toast.success("Logged out successfully"); // Notify the user
   };
   return (
