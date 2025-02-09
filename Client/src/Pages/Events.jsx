@@ -13,8 +13,8 @@ const Events = () => {
   const [events, setEvents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6; // Number of items per page
-  const data = useSelector((state) => state.auth);
-  console.log(data.user.token);
+  // const data = useSelector((state) => state.auth);
+  // console.log(data?.user?.token);
 
   // Filter events based on the search query
   const filteredEvents = events.filter((event) =>
@@ -38,14 +38,7 @@ const Events = () => {
 
   const allevents = async () => {
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/events`,
-        {
-          headers: {
-            Authorization: `Bearer ${data.user.token}`, // Pass the token here
-          },
-        }
-      );
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/events`);
 
       // dispatch(login(info));
       // console.log("events");

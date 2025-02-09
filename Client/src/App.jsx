@@ -11,7 +11,11 @@ function App() {
       {path == "/login" ||
       path == "/signup" ||
       path == "/Login" ||
-      path == "/Signup" ? (
+      path == "/Signup" ||
+      path == "/employee-login" ||
+      path == "/employee-Login" ||
+      path == "/Employee-Login" ||
+      path == "/Employee-login" ? (
         <>
           <ToastContainer />
           <Outlet />

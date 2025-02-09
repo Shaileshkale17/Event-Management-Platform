@@ -20,7 +20,6 @@ export const authenticateToken =
       // Attach the user data to the request
       req.user = decoded;
 
-      console.log("token 1 ", decoded.role);
       // Check for roles if required
       if (requiredRoles.length > 0 && !requiredRoles.includes(decoded.role)) {
         return res.status(403).json({

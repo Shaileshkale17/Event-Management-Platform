@@ -17,10 +17,15 @@ import Contact_us_ from "./Pages/Contact_us_";
 import EmployeeList from "./Pages/Test";
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import AdminAndEmpLogin from "./Pages/AdminAndEmpLogin";
+import ProtectedRoute from "./Middlewares/routes.Middlewares";
+import Unauthorized from "./Pages/Unauthorized";
+import ErrorPage from "./Pages/ErrorPage";
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
@@ -44,7 +49,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/event/:id",
-        element: <EventsInfo />,
+        element: (
+          <ProtectedRoute role="User">
+            <EventsInfo />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/login",
@@ -60,15 +69,35 @@ const router = createBrowserRouter([
       },
       {
         path: "/dashboard-emp",
-        element: <EmpDashboard />,
+        element: (
+          <ProtectedRoute role="employee">
+            <EmpDashboard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/employee-login",
+        element: <AdminAndEmpLogin />,
       },
       {
         path: "/dashboard-main",
-        element: <MainDashboard />,
+        element: (
+          <ProtectedRoute role="admin">
+            <MainDashboard />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/dashboard-main-add",
-        element: <AddEvents />,
+        element: (
+          <ProtectedRoute role="admin">
+            <AddEvents />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/Unauthorized",
+        element: <Unauthorized />,
       },
     ],
   },
