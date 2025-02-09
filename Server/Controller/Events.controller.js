@@ -2,31 +2,43 @@ import Event from "../model/Event.Model.js";
 import { v2 as cloudinary } from "cloudinary";
 import ConnectCloudinary from "../Config/cloudinary.js";
 export const createEvent = async (req, res, io) => {
-  const { title, description, image, imageUrl, tags, date, price, packages } =
-    req.body;
-
   try {
+    const { title, description, tags, date, price, packages } = req.body;
+
+    // Log req.files to check if files are uploaded properly
+    console.log("req.files:", req.files);
+
+    // Ensure Cloudinary is connected
     await ConnectCloudinary();
-    const imageUrlLocalPath = req.files?.imageUrl[0]?.path;
-    console.log("imageUrlLocalPath", imageUrlLocalPath);
 
-    // Upload images to Cloudinary
-    let result = await cloudinary.uploader.upload(imageUrlLocalPath, {
-      resource_type: "image",
-    });
+    // Extract the image path from req.files
+    // const imageUrlLocalPath = req.files?.imageUrl?.[0]?.path;
+    // if (!imageUrlLocalPath) {
+    //   return res.status(400).json({
+    //     status: 400,
+    //     message: "Image is required for creating an event",
+    //     success: false,
+    //   });
+    // }
+    // console.log("imageUrlLocalPath:", imageUrlLocalPath);
 
+    // Upload the image to Cloudinary
+    // const result = await cloudinary.uploader.upload(imageUrlLocalPath, {
+    //   resource_type: "image",
+    // });
+
+    // Create the event in the database
     const newEvent = await Event.create({
       title,
       description,
-      image,
-      imageUrl: result.secure_url,
-      cloudinary_public_id: result.public_id,
+      // imageUrl: result.secure_url,
+      // cloudinary_public_id: result.public_id,
       tags,
       date,
       price,
-      packages,
+      packages: packages, // Parse packages if sent as a JSON string
     });
-
+    // console.log(newEvent);
     if (!newEvent) {
       return res.status(400).json({
         status: 400,
@@ -34,17 +46,20 @@ export const createEvent = async (req, res, io) => {
         success: false,
       });
     }
+
+    // Emit the new event to connected clients
     io.emit("new_Event", {
       id: newEvent._id,
       title: newEvent.title,
       description: newEvent.description,
-      image: newEvent.image,
       imageUrl: newEvent.imageUrl,
       tags: newEvent.tags,
       date: newEvent.date,
       price: newEvent.price,
       packages: newEvent.packages,
     });
+
+    // Return success response
     return res.status(201).json({
       status: 201,
       data: newEvent,
@@ -52,6 +67,7 @@ export const createEvent = async (req, res, io) => {
       success: true,
     });
   } catch (error) {
+    console.error("Error creating event:", error);
     return res.status(500).json({
       status: 500,
       error: error.message,
@@ -66,13 +82,13 @@ export const getAllEvents = async (req, res, io) => {
   try {
     const events = await Event.find();
 
-    if (!events.length) {
-      return res.status(404).json({
-        status: 404,
-        message: "No events found",
-        success: false,
-      });
-    }
+    // if (!events.length) {
+    //   return res.status(404).json({
+    //     status: 404,
+    //     message: "No events found",
+    //     success: false,
+    //   });
+    // }
     io.emit("all_events_retrieved", {
       message: "All events have been retrieved",
       count: events.length,

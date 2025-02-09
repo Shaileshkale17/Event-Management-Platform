@@ -8,12 +8,11 @@ import { toast } from "react-toastify";
 const Navber = () => {
   const dispatch = useDispatch();
   const { isLoggedIn } = useSelector((state) => state.auth);
-
+  const data = useSelector((state) => state.auth);
   const handleLogout = () => {
     dispatch(logout());
     toast.success("Logged out successfully"); // Notify the user
   };
-
   return (
     <div className="absolute z-30 w-full px-16 mt-4">
       <nav className="flex flex-row justify-between border-white p-4 rounded-2xl bg-[#28475cac] text-white">
@@ -44,6 +43,15 @@ const Navber = () => {
               Contact us
             </Link>
           </li>
+          {data?.user?.user?.role === "User" ? (
+            <li>
+              <Link to="/dashboard-user" className="hover:underline">
+                Dashboard
+              </Link>
+            </li>
+          ) : (
+            ""
+          )}
         </ul>
         <div>
           {isLoggedIn ? (

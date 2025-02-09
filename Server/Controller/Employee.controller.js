@@ -15,71 +15,71 @@ export const createEmployee = async (req, res, io) => {
     salary,
     extraDetails,
   } = req.body;
-
-  try {
-    // Check if the email already exists
-    const existingEmployee = await Employee.findOne({ email });
-    if (existingEmployee) {
-      return res.status(400).json({
-        status: 400,
-        message: "Email already exists",
-        success: false,
-      });
-    }
-
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-    await ConnectCloudinary();
-    const imageUrlLocalPath = req.files?.imageUrl[0]?.path;
-    console.log("imageUrlLocalPath", imageUrlLocalPath);
-
-    // Upload images to Cloudinary
-    let result = await cloudinary.uploader.upload(imageUrlLocalPath, {
-      resource_type: "image",
-    });
-
-    const newEmployee = new Employee({
-      name,
-      email,
-      password: hashedPassword,
-      location,
-      empType,
-      role,
-      salary,
-      extraDetails,
-      image: result.secure_url,
-      cloudinary_public_id: result.public_id,
-    });
-
-    const savedEmployee = await newEmployee.save();
-
-    // Emit event to all connected clients
-    io.emit("new_employee", {
-      id: savedEmployee._id,
-      name: savedEmployee.name,
-      email: savedEmployee.email,
-      location: savedEmployee.location,
-      empType: savedEmployee.empType,
-      role: savedEmployee.role,
-      salary: savedEmployee.salary,
-      image: savedEmployee.secure_url,
-      cloudinary_public_id: savedEmployee.public_id,
-    });
-
-    return res.status(201).json({
-      status: 201,
-      message: "Employee created successfully",
-      data: savedEmployee,
-      success: true,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      status: 500,
-      message: "Server error",
-      error: error.message,
+  // try {
+  // Check if the email already exists
+  const existingEmployee = await Employee.findOne({ email });
+  if (existingEmployee) {
+    return res.status(400).json({
+      status: 400,
+      message: "Email already exists",
       success: false,
     });
   }
+
+  // Hash password
+  const hashedPassword = await bcrypt.hash(password, 10);
+  console.log("hashedPassword", hashedPassword);
+  // await ConnectCloudinary();
+  // const imageUrlLocalPath = req.files?.imageUrl[0]?.path;
+  // console.log("imageUrlLocalPath", imageUrlLocalPath);
+
+  // // Upload images to Cloudinary
+  // let result = await cloudinary.uploader.upload(imageUrlLocalPath, {
+  //   resource_type: "image",
+  // });
+
+  const newEmployee = new Employee({
+    name,
+    email,
+    password: hashedPassword,
+    location,
+    empType,
+    role,
+    salary,
+    extraDetails,
+    // image: result?.secure_url,
+    // cloudinary_public_id: result?.public_id,
+  });
+
+  const savedEmployee = await newEmployee.save();
+
+  // Emit event to all connected clients
+  io.emit("new_employee", {
+    id: savedEmployee._id,
+    name: savedEmployee.name,
+    email: savedEmployee.email,
+    location: savedEmployee.location,
+    empType: savedEmployee.empType,
+    role: savedEmployee.role,
+    salary: savedEmployee.salary,
+    image: savedEmployee.secure_url,
+    cloudinary_public_id: savedEmployee.public_id,
+  });
+
+  return res.status(201).json({
+    status: 201,
+    message: "Employee created successfully",
+    data: savedEmployee,
+    success: true,
+  });
+  // } catch (error) {
+  //   return res.status(500).json({
+  //     status: 500,
+  //     message: "Server error",
+  //     error: error.message,
+  //     success: false,
+  //   });
+  // }
 };
 
 // Get All Employees

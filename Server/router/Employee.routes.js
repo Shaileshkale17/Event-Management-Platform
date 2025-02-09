@@ -15,7 +15,6 @@ const router = express.Router();
 router.post(
   "/employees",
   upload.fields([{ name: "imageUrl", maxCount: 1 }]),
-  authenticateToken(["employee", "admin", "subadmin"]),
   (req, res) => createEmployee(req, res, req.app.locals.io)
 );
 router.post("/employees/login", (req, res) =>

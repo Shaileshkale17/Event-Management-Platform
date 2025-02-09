@@ -15,7 +15,6 @@ const router = express.Router();
 router.post(
   "/events",
   upload.fields([{ name: "imageUrl", maxCount: 1 }]),
-  authenticateToken(["employee", "admin", "subadmin"]),
   (req, res) => createEvent(req, res, req.app.locals.io)
 );
 

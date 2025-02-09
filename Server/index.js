@@ -8,6 +8,7 @@ import routersemployee from "./router/Employee.routes.js";
 import eventsrouter from "./router/Event.routes.js";
 import Messagerouter from "./router/Message.routes.js";
 import Userrouter from "./router/User.routes.js";
+import inforouter from "./router/UserInfo.routes.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -27,6 +28,7 @@ app.use("/api/v1/", routersemployee);
 app.use("/api/v1/", eventsrouter);
 app.use("/api/v1/", Messagerouter);
 app.use("/api/v1/", Userrouter);
+app.use("/api/v1/", inforouter);
 
 // DataBase Connection
 

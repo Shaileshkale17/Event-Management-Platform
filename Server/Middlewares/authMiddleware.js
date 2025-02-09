@@ -5,7 +5,6 @@ export const authenticateToken =
   (requiredRoles = []) =>
   (req, res, next) => {
     const token = req.headers["authorization"]?.split(" ")[1]; // Expected: "Bearer <token>"
-
     if (!token) {
       return res.status(401).json({
         status: 401,
@@ -21,6 +20,7 @@ export const authenticateToken =
       // Attach the user data to the request
       req.user = decoded;
 
+      console.log("token 1 ", decoded.role);
       // Check for roles if required
       if (requiredRoles.length > 0 && !requiredRoles.includes(decoded.role)) {
         return res.status(403).json({

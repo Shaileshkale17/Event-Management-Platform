@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import images from "../assets/handshake-4002834_1280.jpg";
-import searchIcon from "../assets/find.png";
-import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const Contact_us_ = () => {
   const eventTypes = [
@@ -20,7 +19,8 @@ const Contact_us_ = () => {
   const [Phone, setPhone] = useState("");
   const [enquiry, setenquiry] = useState("");
   const [Messages, setMessages] = useState("");
-
+  const data = useSelector((state) => state.auth);
+  const { isLoggedIn } = useSelector((state) => state.auth);
   const ContectMessage = async (e) => {
     e.preventDefault();
 
@@ -29,7 +29,7 @@ const Contact_us_ = () => {
     }
 
     try {
-      const res = await axios.post(
+      let res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/messages`,
         {
           FirstName,
@@ -40,10 +40,19 @@ const Contact_us_ = () => {
           Messages,
         }
       );
-
-      toast.success("Signup successful.");
-      // dispatch(login(info));
-      console.log("Signup response:", res);
+      if (isLoggedIn) {
+        let usermessage = await axios.post(
+          `${import.meta.env.VITE_BACKEND_URL}/users/addEvent`,
+          { userId: data.user.user.id, eventId: res.data.data._id },
+          {
+            headers: {
+              Authorization: `Bearer ${data.user.token}`,
+            },
+          }
+        );
+        console.log("usermessage", usermessage);
+        toast.success("Thank you for showing interest!");
+      }
 
       // window.location.replace("/login");
       setFirstName("");

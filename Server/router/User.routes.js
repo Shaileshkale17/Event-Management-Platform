@@ -7,6 +7,8 @@ import {
   updateUser,
   updateUserPassword,
   deleteUser,
+  addEventToUser,
+  addMessageToUser,
 } from "../Controller/User.Controller.js";
 import { upload } from "../Middlewares/multerMiddlewares.js";
 import { authenticateToken } from "../Middlewares/authMiddleware.js";
@@ -55,7 +57,30 @@ router.post(
 // Add message to user's Messages
 router.post(
   "/users/addMessage",
-  authenticateToken(["User", "employee", "admin", "subadmin"]),
+  authenticateToken(["employee", "admin", "subadmin"]),
   (req, res) => addMessageToUser(req, res, req.app.locals.io)
 );
+
+// router.get(
+//   "/users/events",
+//   authenticateToken(["employee", "admin", "subadmin"]),
+//   (req, res) => getUsersWithBookedEvents(req, res, req.app.locals.io)
+// );
+// router.get(
+//   "/users/messages",
+//   authenticateToken(["employee", "admin", "subadmin"]),
+//   (req, res) => getUsersWithMessagesSent(req, res, req.app.locals.io)
+// );
+
+// router.get(
+//   "/users/events",
+//   // authenticateToken(["User", "employee", "admin", "subadmin"]),
+//   (req, res) => getUsersWithBookedEvents(req, res, req.app.locals.io)
+// );
+// router.get(
+//   "/users/message",
+//   // authenticateToken(["User", "employee", "admin", "subadmin"]),
+//   (req, res) => getUsersWithMessagesSent(req, res, req.app.locals.io)
+// );
+
 export default router;

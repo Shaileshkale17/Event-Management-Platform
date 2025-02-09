@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import ConnectCloudinary from "../Config/cloudinary.js";
 import { v2 as cloudinary } from "cloudinary";
+import mongoose from "mongoose";
 export const createUser = async (req, res, io) => {
   const { FullName, Email, Password } = req.body;
   try {
@@ -143,19 +144,20 @@ export const getAllUsers = async (req, res, io) => {
 
 export const getUserById = async (req, res, io) => {
   const { id } = req.params;
+  console.log(id);
+
+  if (!id) {
+    return res.status(400).json({
+      status: 400,
+      message: "User ID is required",
+      success: false,
+    });
+  }
 
   try {
-    if (!id) {
-      return res.status(400).json({
-        status: 400,
-        message: "User ID is required",
-        success: false,
-      });
-    }
-
     const data = await User.aggregate([
       {
-        $match: { _id: mongoose.Types.ObjectId(id) }, // Match the user by ID
+        $match: { _id: new mongoose.Types.ObjectId(id) }, // Match the user by ID
       },
       {
         $lookup: {
@@ -186,29 +188,31 @@ export const getUserById = async (req, res, io) => {
       },
     ]);
 
-    if (!data) {
+    if (!data || data.length === 0) {
       return res.status(404).json({
         status: 404,
         message: "User not found",
         success: false,
       });
     }
+
     io.emit("user_retrieved", {
-      message: "An data has been retrieved",
+      message: "User data has been retrieved",
       data: {
-        id: data._id,
-        FullName: data.FullName,
-        Email: data.Email,
-        Phone: data.Phone,
-        empType: data.empType,
-        role: data.role,
-        salary: data.salary,
-        image: data.image,
+        id: data[0]._id,
+        FullName: data[0].FullName,
+        Email: data[0].Email,
+        Phone: data[0].Phone,
+        empType: data[0].empType,
+        role: data[0].role,
+        salary: data[0].salary,
+        image: data[0].image,
       },
     });
+
     return res.status(200).json({
       status: 200,
-      data,
+      data: data[0],
       message: "User fetched successfully",
       success: true,
     });
@@ -451,3 +455,35 @@ export const addEventToUser = async (req, res, io) => {
     });
   }
 };
+
+// export const getUsersWithBookedEvents = async (req, res, io) => {
+//   try {
+//     const users = await User.find({ EventsBook: { $exists: true, $ne: [] } })
+//       .populate("EventsBook")
+//       .exec();
+//     console.log(users);
+//     io.emit("usersWithBookedEvents", users);
+
+//     res.status(200).json({ success: true, users });
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ success: false, message: "Failed to fetch users", error });
+//   }
+// };
+
+// export const getUsersWithMessagesSent = async (req, res, io) => {
+//   try {
+//     const users = await User.find({ Messages: { $exists: true, $ne: [] } })
+//       .populate("Messages")
+//       .exec();
+
+//     io.emit("usersWithMessagesSent", users);
+
+//     res.status(200).json({ success: true, users });
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ success: false, message: "Failed to fetch users", error });
+//   }
+// };
