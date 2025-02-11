@@ -2,59 +2,103 @@ import React from "react";
 import logo_incon from "../assets/Logo.png";
 import { Link } from "react-router-dom";
 const Footer = () => {
+  const externalLinks = {
+    portfolio: "https://protfolio-shailesh-full-stack-developer.vercel.app/",
+    github: "https://github.com/Shaileshkale17",
+  };
+
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between h-80 bg-black text-white px-16 mt-3">
-      <div className="flex flex-col items-center md:items-start mb-6 md:mb-0">
-        <img src={logo_incon} alt="Logo Icon" className="w-16 h-16 mb-4" />
-        <Link to="https://protfolio-shailesh-full-stack-developer.vercel.app/">
-          <h1 className="text-lg font-semibold">Developed by Shailesh Kale</h1>
-        </Link>
+    <footer className="bg-black  text-gray-300 py-10 px-5">
+      <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Branding Section */}
+        <div className="flex flex-col items-center md:items-start gap-8">
+          <Link to="/" className="flex flex-row items-center">
+            <img src={logo_incon} alt="Logo" className="w-10 h-10" />
+
+            <h1 className="ml-2 text-xl font-semibold hover:text-gray-400 text-gray-300">
+              My Event
+            </h1>
+          </Link>
+          <div>
+            <p className="text-center md:text-left hover:text-gray-400 text-gray-300">
+              Empowering your journey with quality software solutions.
+            </p>
+            <a
+              href={externalLinks.portfolio}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-lg font-semibold  mt-4 hover:underline hover:text-gray-400 text-gray-300">
+              Developed by Shailesh Kale
+            </a>
+          </div>
+        </div>
+
+        {/* Quick Links Section */}
+        <div className="flex flex-col items-center md:items-start">
+          <h2 className="text-xl font-semibold mb-4">Quick Links</h2>
+          <ul className="space-y-3">
+            <li>
+              <a
+                href="/"
+                className="hover:underline hover:text-gray-400 text-gray-300">
+                Home
+              </a>
+            </li>
+            <li>
+              <a
+                href="/about"
+                className="hover:underline hover:text-gray-400 text-gray-300">
+                About
+              </a>
+            </li>
+            <li>
+              <a
+                href="/events"
+                className="hover:underline hover:text-gray-400 text-gray-300">
+                Events
+              </a>
+            </li>
+            <li>
+              <a
+                href="/contact"
+                className="hover:underline hover:text-gray-400 text-gray-300">
+                Contact Us
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Connect With Me Section */}
+        <div className="flex flex-col items-center md:items-start">
+          <h2 className="text-xl font-semibold mb-4">Connect with Me</h2>
+          <ul className="space-y-3">
+            <li>
+              <a
+                href={externalLinks.portfolio}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline hover:text-gray-400 text-gray-300">
+                Portfolio
+              </a>
+            </li>
+            <li>
+              <a
+                href={externalLinks.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline hover:text-gray-400 text-gray-300">
+                GitHub
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div className="flex flex-col items-center md:items-start">
-        <h2 className="text-lg font-semibold mb-4">Quick Links</h2>
-        <ul className="flex flex-col gap-2">
-          <li>
-            <Link to="/" className="hover:underline">
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link to="/about" className="hover:underline">
-              About
-            </Link>
-          </li>
-          <li>
-            <Link to="/events" className="hover:underline">
-              Events
-            </Link>
-          </li>
-          <li>
-            <Link to="/contact" className="hover:underline">
-              Contact Us
-            </Link>
-          </li>
-        </ul>
+
+      {/* Bottom Section */}
+      <div className="border-t border-gray-700 mt-8 pt-4 text-center text-sm hover:text-gray-400 text-gray-300">
+        © {new Date().getFullYear()} Shailesh Kale. All Rights Reserved.
       </div>
-      <div className="flex flex-col items-center md:items-start">
-        <h2 className="text-lg font-semibold mb-4">Connect with Me</h2>
-        <ul className="flex flex-col gap-2">
-          <li>
-            <Link
-              to="https://protfolio-shailesh-full-stack-developer.vercel.app/"
-              className="hover:underline">
-              Shailesh Kale Portfolio
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="https://github.com/Shaileshkale17"
-              className="hover:underline">
-              GitHub
-            </Link>
-          </li>
-        </ul>
-      </div>
-    </div>
+    </footer>
   );
 };
 

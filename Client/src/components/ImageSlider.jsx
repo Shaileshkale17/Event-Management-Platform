@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 
-const ImageSlider = ({ slides }) => {
+const ImageSlider = ({ slides = [] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -19,12 +19,12 @@ const ImageSlider = ({ slides }) => {
     <div
       className="relative w-full overflow-hidden h-[49rem]  "
       style={{
-        backgroundImage: `url(${slides[currentIndex].image})`,
+        backgroundImage: `url(${slides[currentIndex]?.image})`,
       }}>
       <div
         className="absolute inset-0  bg-opacity-50 bg-cover bg-no-repeat bg-left opacity-75"
         style={{
-          backgroundImage: `url(${slides[currentIndex].image})`,
+          backgroundImage: `url(${slides[currentIndex]?.image})`,
         }}></div>
 
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-4">
@@ -36,7 +36,7 @@ const ImageSlider = ({ slides }) => {
             exit={{ opacity: 0, y: 50 }}
             transition={{ duration: 0.8 }}
             className="text-3xl md:text-5xl font-bold mb-4 ">
-            {slides[currentIndex].title}
+            {slides[currentIndex]?.title}
           </motion.h2>
         </AnimatePresence>
 
@@ -48,7 +48,7 @@ const ImageSlider = ({ slides }) => {
             exit={{ opacity: 0, y: -50 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-lg md:text-xl">
-            {slides[currentIndex].text}
+            {slides[currentIndex]?.text}
           </motion.p>
         </AnimatePresence>
         <AnimatePresence mode="wait">
