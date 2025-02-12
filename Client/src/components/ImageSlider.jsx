@@ -22,7 +22,7 @@ const ImageSlider = ({ slides = [] }) => {
         backgroundImage: `url(${slides[currentIndex]?.image})`,
       }}>
       <div
-        className="absolute inset-0  bg-opacity-50 bg-cover bg-no-repeat bg-left opacity-75"
+        className="absolute inset-0  bg-opacity-50 bg-cover bg-no-repeat  lg:bg-left opacity-75"
         style={{
           backgroundImage: `url(${slides[currentIndex]?.image})`,
         }}></div>

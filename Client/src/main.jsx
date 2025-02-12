@@ -21,6 +21,7 @@ import AdminAndEmpLogin from "./Pages/AdminAndEmpLogin";
 import ProtectedRoute from "./Middlewares/routes.Middlewares";
 import Unauthorized from "./Pages/Unauthorized";
 import ErrorPage from "./Pages/ErrorPage";
+import UnderDevelopment from "./Pages/UnderDevelopment";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -98,6 +99,10 @@ const router = createBrowserRouter([
       {
         path: "/Unauthorized",
         element: <Unauthorized />,
+      },
+      {
+        path: "/*",
+        element: <UnderDevelopment />,
       },
     ],
   },

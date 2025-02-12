@@ -149,9 +149,11 @@ const Contact_us_ = () => {
                   id="select"
                   onChange={(e) => setenquiry(e.target.value)}
                   value={enquiry}
-                  className="border text-gray-300 border-gray-300 p-2 rounded-lg w-full">
+                  className="border text-gray-300 border-gray-300 p-2  rounded-lg w-full ">
                   {eventTypes.map((item) => (
-                    <option value={item} className="bg-black">
+                    <option
+                      value={item}
+                      className="bg-black hover:bg-gray-300 ">
                       {item}
                     </option>
                   ))}

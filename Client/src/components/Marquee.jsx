@@ -22,6 +22,7 @@ const ImageMarquee = ({ imagesarr = [] }) => {
                   Title={image.title}
                   image={image.image}
                   id={image.id}
+                  linkURL={`event-Plan/${image.id}`}
                 />
               ))}
             </Marquee>
