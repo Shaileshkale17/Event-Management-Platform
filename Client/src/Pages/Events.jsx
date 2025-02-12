@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import images from "../assets/awesome-sauce-creative-lvZN2e4LPvg-unsplash.jpg";
-import searchIcon from "../assets/find.png";
+import searchIcon from "../assets/find.svg";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "react-toastify";
 import NotImageFond from "../assets/awesome-sauce-creative-uRWekN5S39g-unsplash.jpg";
 import { io } from "socket.io-client";
+import EventCard from "../components/EventCard";
+import EventCard2 from "../components/EventCard2";
 
 const Events = () => {
   const [search, setSearch] = useState("");
@@ -78,58 +80,54 @@ const Events = () => {
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-black">
       <div
         className="h-96 bg-cover bg-center flex items-center justify-center"
         style={{ backgroundImage: `url(${images})` }}>
         <h1 className="text-4xl font-bold text-white shadow-md">Events</h1>
       </div>
       <div className="p-6 text-center">
-        <div className="relative mt-5">
-          <img
-            src={searchIcon}
-            alt="search"
-            className="w-8 h-8 absolute top-2 left-[37.5%]"
-          />
-          <input
-            type="search"
-            name="search"
-            id="search"
-            className="w-[30rem] pl-12  border border-solid border-black py-3 rounded-2xl"
-            placeholder="Search for events..."
-            onChange={(e) => setSearch(e.target.value)}
-            value={search}
-          />
+        <div className="w-full flex justify-center">
+          <div className="flex flex-col flex-wrap gap-1 relative">
+            <input
+              type="text"
+              name="search"
+              id="search"
+              className="w-full lg:w-[30rem] pl-12 text-gray-300  border border-solid border-gray-400 py-3 rounded-2xl"
+              placeholder="Search for events..."
+              onChange={(e) => setSearch(e.target.value)}
+              value={search}
+            />
+            <img
+              src={searchIcon}
+              alt="search"
+              className="absolute -left-1 -top-1 w-15 h-auto "
+            />
+          </div>
         </div>
-
-        <p className="mt-4 text-gray-700">
+        <p className="mt-4 ">
           {currentEvents.length == 0 ? `Searching for: ${search}` : ""}
         </p>
 
-        <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {currentEvents.map((event, index) => (
-            <Link to={`/event/${event._id}`}>
-              <div
-                key={index}
-                className="border border-gray-300 p-4 rounded-lg shadow-md">
-                <img
-                  src={event.image || NotImageFond}
-                  alt={event.title}
-                  className="w-full h-80 object-cover rounded-md"
-                />
-                <h2 className="mt-4 text-xl font-bold">{event.title}</h2>
-                <p className="text-gray-600">{event.description}</p>
-              </div>
-            </Link>
+            <EventCard2
+              Title={event.title}
+              description={event.description}
+              image={event.image || NotImageFond}
+              linkURL={`/event/${event._id}`}
+              id={event._id}
+              key={event._id}
+            />
           ))}
         </div>
       </div>
       {currentEvents.length > 0 ? (
-        <div className="flex justify-center items-center gap-4 mt-6">
+        <div className=" flex justify-center items-center gap-4 mt-6">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="px-4 py-2 border rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-50">
+            className="px-4 py-2 border rounded-md bg-gray-200 hover:bg-gray-300 disabled:opacity-50">
             Previous
           </button>
           {Array.from({ length: totalPages }, (_, i) => (
@@ -138,8 +136,8 @@ const Events = () => {
               onClick={() => handlePageChange(i + 1)}
               className={`px-4 py-2 border rounded-md ${
                 currentPage === i + 1
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-100 hover:bg-gray-200"
+                  ? "bg-gray-400 text-white"
+                  : "bg-gray-300 hover:bg-gray-200"
               }`}>
               {i + 1}
             </button>
@@ -147,7 +145,7 @@ const Events = () => {
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="px-4 py-2 border rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-50">
+            className="px-4 py-2 border rounded-md bg-gray-200 hover:bg-gray-300 disabled:opacity-50">
             Next
           </button>
         </div>

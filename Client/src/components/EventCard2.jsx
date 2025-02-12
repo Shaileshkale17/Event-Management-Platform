@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const EventCard = ({ image, Title, id, starRating, description, linkURL }) => {
+const EventCard2 = ({ image, Title, id, starRating, description, linkURL }) => {
   const starRatingArr = Array.from(
     { length: starRating },
     (_, index) => `Star${index}`
@@ -9,7 +9,7 @@ const EventCard = ({ image, Title, id, starRating, description, linkURL }) => {
   console.log(starRatingArr);
   return (
     <div
-      className="flex flex-col border border-solid border-white bg-[#00000052] items-center text-white gap-4  rounded-2xl  mx-7 cursor-none "
+      className="flex flex-col border border-solid border-white bg-[#00000052] items-center text-white gap-4  rounded-2xl   cursor-none "
       key={id}>
       <Link to={linkURL} key={id}>
         <img
@@ -31,4 +31,4 @@ const EventCard = ({ image, Title, id, starRating, description, linkURL }) => {
   );
 };
 
-export default EventCard;
+export default EventCard2;
