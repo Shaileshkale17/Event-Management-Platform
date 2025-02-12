@@ -71,7 +71,7 @@ const Contact_us_ = () => {
   };
 
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen  bg-black">
       <div
         className="h-96 bg-cover bg-center flex items-center justify-center"
         style={{ backgroundImage: `url(${images})` }}>
@@ -79,9 +79,9 @@ const Contact_us_ = () => {
       </div>
       {/* Contact Form Section */}
       <div className=" mx-auto py-12  px-16">
-        <div className="flex flex-wrap bg-white shadow-lg rounded-lg overflow-hidden">
+        <div className="flex flex-wrap  shadow-lg rounded-lg overflow-hidden">
           {/* Left Section */}
-          <div className="w-full md:w-1/2 bg-black text-white p-8 space-y-6">
+          <div className="w-full md:w-1/2 bg-black text-gray-300 p-8 space-y-6">
             <h2 className="text-2xl font-bold">Contact Information</h2>
             <p>Say something to start a live chat!</p>
             <div className="space-y-4">
@@ -110,14 +110,14 @@ const Contact_us_ = () => {
                 <input
                   type="text"
                   placeholder="First Name"
-                  className="border border-gray-300 p-2 rounded-lg w-full"
+                  className="border text-gray-300 border-gray-300 p-2 rounded-lg w-full"
                   onChange={(e) => setFirstName(e.target.value)}
                   value={FirstName}
                 />
                 <input
                   type="text"
                   placeholder="Last Name"
-                  className="border border-gray-300 p-2 rounded-lg w-full"
+                  className="border text-gray-300 border-gray-300 p-2 rounded-lg w-full"
                   onChange={(e) => setLastName(e.target.value)}
                   value={LastName}
                 />
@@ -126,20 +126,22 @@ const Contact_us_ = () => {
                 <input
                   type="email"
                   placeholder="Email"
-                  className="border border-gray-300 p-2 rounded-lg w-full"
+                  className="border text-gray-300 border-gray-300 p-2 rounded-lg w-full"
                   onChange={(e) => setEmail(e.target.value)}
                   value={Email}
                 />
                 <input
                   type="text"
                   placeholder="Phone Number"
-                  className="border border-gray-300 p-2 rounded-lg w-full"
+                  className="border text-gray-300 border-gray-300 p-2 rounded-lg w-full"
                   onChange={(e) => setPhone(e.target.value)}
                   value={Phone}
                 />
               </div>
               <div>
-                <label className="block mb-2 font-medium" htmlFor="select">
+                <label
+                  className="text-gray-300 block mb-2 font-medium"
+                  htmlFor="select">
                   Select Subject
                 </label>
                 <select
@@ -147,9 +149,11 @@ const Contact_us_ = () => {
                   id="select"
                   onChange={(e) => setenquiry(e.target.value)}
                   value={enquiry}
-                  className="border border-gray-300 p-2 rounded-lg w-full">
+                  className="border text-gray-300 border-gray-300 p-2 rounded-lg w-full">
                   {eventTypes.map((item) => (
-                    <option value={item}>{item}</option>
+                    <option value={item} className="bg-black">
+                      {item}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -158,10 +162,10 @@ const Contact_us_ = () => {
                 rows="5"
                 onChange={(e) => setMessages(e.target.value)}
                 value={Messages}
-                className="border border-gray-300 p-2 rounded-lg w-full"></textarea>
+                className="border text-gray-300 border-gray-300 p-2 rounded-lg w-full"></textarea>
               <button
                 type="submit"
-                className="bg-[#28475cac] text-white py-2 px-6 rounded-lg hover:bg-gray-800">
+                className="text-gray-400 hover:text-gray-200 py-2 px-6 rounded-lg border border-solid border-gray-400 hover:border-gray-200 ">
                 Send Message
               </button>
             </form>

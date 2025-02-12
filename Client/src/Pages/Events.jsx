@@ -127,7 +127,7 @@ const Events = () => {
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="px-4 py-2 border rounded-md bg-gray-200 hover:bg-gray-300 disabled:opacity-50">
+            className="px-4 py-2 border rounded-md text-gray-300 hover:text-gray-400 disabled:opacity-50">
             Previous
           </button>
           {Array.from({ length: totalPages }, (_, i) => (
@@ -136,8 +136,8 @@ const Events = () => {
               onClick={() => handlePageChange(i + 1)}
               className={`px-4 py-2 border rounded-md ${
                 currentPage === i + 1
-                  ? "bg-gray-400 text-white"
-                  : "bg-gray-300 hover:bg-gray-200"
+                  ? "text-gray-300"
+                  : "bg-gray-300 hover:text-gray-400"
               }`}>
               {i + 1}
             </button>
@@ -145,7 +145,7 @@ const Events = () => {
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="px-4 py-2 border rounded-md bg-gray-200 hover:bg-gray-300 disabled:opacity-50">
+            className="px-4 py-2 border rounded-md text-gray-300 hover:text-gray-400 disabled:opacity-50">
             Next
           </button>
         </div>
