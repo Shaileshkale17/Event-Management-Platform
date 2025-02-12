@@ -78,7 +78,7 @@ const Contact_us_ = () => {
         <h1 className="text-4xl font-bold text-white shadow-md">Contact us</h1>
       </div>
       {/* Contact Form Section */}
-      <div className=" mx-auto py-12  px-16">
+      <div className=" mx-auto py-12 lg:px-16">
         <div className="flex flex-wrap  shadow-lg rounded-lg overflow-hidden">
           {/* Left Section */}
           <div className="w-full md:w-1/2 bg-black text-gray-300 p-8 space-y-6">
