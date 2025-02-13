@@ -22,11 +22,13 @@ import ProtectedRoute from "./Middlewares/routes.Middlewares";
 import Unauthorized from "./Pages/Unauthorized";
 import ErrorPage from "./Pages/ErrorPage";
 import UnderDevelopment from "./Pages/UnderDevelopment";
+import LoadingScreen from "./components/LoadingScreen";
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     // errorElement: <ErrorPage />,
+
     children: [
       {
         path: "/",

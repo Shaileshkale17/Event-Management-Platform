@@ -9,6 +9,7 @@ import NotImageFond from "../assets/awesome-sauce-creative-uRWekN5S39g-unsplash.
 import { io } from "socket.io-client";
 import EventCard from "../components/EventCard";
 import EventCard2 from "../components/EventCard2";
+import LoadingScreen from "../components/LoadingScreen";
 
 const Events = () => {
   const [search, setSearch] = useState("");
@@ -78,79 +79,85 @@ const Events = () => {
       socket.disconnect();
     };
   }, []);
-
+  console.log(events.length);
   return (
     <div className="min-h-screen bg-black">
-      <div
-        className="h-96 bg-cover bg-center flex items-center justify-center"
-        style={{ backgroundImage: `url(${images})` }}>
-        <h1 className="text-4xl font-bold text-white shadow-md">Events</h1>
-      </div>
-      <div className="p-6 text-center">
-        <div className="w-full flex justify-center">
-          <div className="flex flex-col flex-wrap gap-1 relative">
-            <input
-              type="text"
-              name="search"
-              id="search"
-              className="w-full lg:w-[30rem] pl-12 text-gray-300  border border-solid border-gray-400 py-3 rounded-2xl"
-              placeholder="Search for events..."
-              onChange={(e) => setSearch(e.target.value)}
-              value={search}
-            />
-            <img
-              src={searchIcon}
-              alt="search"
-              className="absolute -left-1 -top-1 w-15 h-auto "
-            />
+      {events.length > 0 ? (
+        <>
+          <div
+            className="h-96 bg-cover bg-center flex items-center justify-center"
+            style={{ backgroundImage: `url(${images})` }}>
+            <h1 className="text-4xl font-bold text-white shadow-md">Events</h1>
           </div>
-        </div>
-        <p className="mt-4 ">
-          {currentEvents.length == 0 ? `Searching for: ${search}` : ""}
-        </p>
+          <div className="p-6 text-center">
+            <div className="w-full flex justify-center">
+              <div className="flex flex-col flex-wrap gap-1 relative">
+                <input
+                  type="text"
+                  name="search"
+                  id="search"
+                  className="w-full lg:w-[30rem] pl-12 text-gray-300  border border-solid border-gray-400 py-3 rounded-2xl"
+                  placeholder="Search for events..."
+                  onChange={(e) => setSearch(e.target.value)}
+                  value={search}
+                />
+                <img
+                  src={searchIcon}
+                  alt="search"
+                  className="absolute -left-1 -top-1 w-15 h-auto "
+                />
+              </div>
+            </div>
+            <p className="mt-4 ">
+              {currentEvents.length == 0 ? `Searching for: ${search}` : ""}
+            </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {currentEvents.map((event, index) => (
-            <EventCard2
-              Title={event.title}
-              description={event.description}
-              image={event.image || NotImageFond}
-              linkURL={`/event/${event._id}`}
-              id={event._id}
-              key={event._id}
-            />
-          ))}
-        </div>
-      </div>
-      {currentEvents.length > 0 ? (
-        <div className=" flex justify-center items-center gap-4 mt-6">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="px-4 py-2 border rounded-md text-gray-300 hover:text-gray-400 disabled:opacity-50">
-            Previous
-          </button>
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i}
-              onClick={() => handlePageChange(i + 1)}
-              className={`px-4 py-2 border rounded-md ${
-                currentPage === i + 1
-                  ? "text-gray-300"
-                  : "bg-gray-300 hover:text-gray-400"
-              }`}>
-              {i + 1}
-            </button>
-          ))}
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="px-4 py-2 border rounded-md text-gray-300 hover:text-gray-400 disabled:opacity-50">
-            Next
-          </button>
-        </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {currentEvents.map((event, index) => (
+                <EventCard2
+                  Title={event.title}
+                  description={event.description}
+                  image={event.image || NotImageFond}
+                  linkURL={`/event/${event._id}`}
+                  id={event._id}
+                  key={event._id}
+                />
+              ))}
+            </div>
+          </div>
+          {currentEvents.length > 0 ? (
+            <div className=" flex justify-center items-center gap-4 mt-6">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-4 py-2 border rounded-md text-gray-300 hover:text-gray-400 disabled:opacity-50">
+                Previous
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => (
+                <button
+                  key={i}
+                  onClick={() => handlePageChange(i + 1)}
+                  className={`px-4 py-2 border rounded-md ${
+                    currentPage === i + 1
+                      ? "text-gray-300"
+                      : "bg-gray-300 hover:text-gray-400"
+                  }`}>
+                  {i + 1}
+                </button>
+              ))}
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 border rounded-md text-gray-300 hover:text-gray-400 disabled:opacity-50">
+                Next
+              </button>
+            </div>
+          ) : (
+            ""
+          )}
+        </>
       ) : (
-        ""
+        <LoadingScreen />
       )}
     </div>
   );
