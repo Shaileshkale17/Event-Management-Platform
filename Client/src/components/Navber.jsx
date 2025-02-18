@@ -10,7 +10,6 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const dispatch = useDispatch();
   const { isLoggedIn, user } = useSelector((state) => state.auth);
-
   const handleLogout = () => {
     dispatch(logout());
     toast.success("Logged out successfully");
@@ -53,7 +52,7 @@ const Navbar = () => {
             className="hover:text-gray-400 text-gray-300 hover:underline">
             Contact Us
           </Link>
-          {user?.role === "User" && (
+          {user?.user?.role === "User" && (
             <Link
               to="/dashboard-user"
               className="hover:text-gray-400 text-gray-300 hover:underline">
