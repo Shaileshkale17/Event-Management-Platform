@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { io } from "socket.io-client";
 import placeholderImage from "../assets/handshake-4002834_1280.jpg";
+import LoadingScreen from "../components/LoadingScreen";
 
 const UserDashboard = () => {
   const [userData, setUserData] = useState(null);
@@ -20,7 +21,6 @@ const UserDashboard = () => {
           },
         }
       );
-      console.log("res", res);
       setUserData(res.data.data);
     } catch (error) {
       const errorMessage =
@@ -50,119 +50,123 @@ const UserDashboard = () => {
   }, []);
 
   return (
-    <div className="min-h-screen">
-      <div
-        className="h-96 bg-cover bg-center flex items-center justify-center"
-        style={{ backgroundImage: `url(${placeholderImage})` }}>
-        <h1 className="text-4xl font-bold text-white shadow-md">
-          User Dashboard
-        </h1>
-      </div>
+    <>
+      {userData ? (
+        <div className="min-h-screen bg-black">
+          <div
+            className="h-96 bg-cover bg-center flex items-center justify-center"
+            style={{ backgroundImage: `url(${placeholderImage})` }}>
+            <h1 className="text-4xl font-bold text-white shadow-md">
+              User Dashboard
+            </h1>
+          </div>
 
-      <div className="container mx-auto py-12 px-8">
-        <div className="bg-white shadow-lg rounded-lg p-6">
-          {userData ? (
-            <>
-              <h2 className="text-2xl font-bold mb-6">User Information</h2>
-              <table className="table-auto w-full border-collapse border border-gray-300">
-                <thead>
-                  <tr className="bg-gray-200">
-                    <th className="border border-gray-300 px-4 py-2 text-left">
-                      Field
-                    </th>
-                    <th className="border border-gray-300 px-4 py-2 text-left">
-                      Value
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="border border-gray-300 px-4 py-2">
-                      Full Name
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {userData.FullName}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border border-gray-300 px-4 py-2">Email</td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {userData.Email}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border border-gray-300 px-4 py-2">Role</td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {userData.role}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border border-gray-300 px-4 py-2">
-                      Total Events
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {userData.totalEvents}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border border-gray-300 px-4 py-2">
-                      Total Messages
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {userData.totalMessages}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-
-              <h3 className="text-xl font-bold mt-8 mb-4">Event Details</h3>
-              {userData.EventDetails.length > 0 ? (
+          <div className="container mx-auto py-12 px-8">
+            <div className="text-gray-300 shadow-lg rounded-lg p-6">
+              <>
+                <h2 className="text-2xl font-bold mb-6">User Information</h2>
                 <table className="table-auto w-full border-collapse border border-gray-300">
                   <thead>
-                    <tr className="bg-gray-200">
+                    <tr className="bg-black">
                       <th className="border border-gray-300 px-4 py-2 text-left">
-                        Event Title
+                        Field
                       </th>
                       <th className="border border-gray-300 px-4 py-2 text-left">
-                        Description
-                      </th>
-                      <th className="border border-gray-300 px-4 py-2 text-left">
-                        Date
-                      </th>
-                      <th className="border border-gray-300 px-4 py-2 text-left">
-                        Price
+                        Value
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {userData.EventDetails.map((event) => (
-                      <tr key={event._id}>
-                        <td className="border border-gray-300 px-4 py-2">
-                          {event.title}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          {event.description}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          {new Date(event.date).toLocaleDateString()}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          {event.price}
-                        </td>
-                      </tr>
-                    ))}
+                    <tr>
+                      <td className="border border-gray-300 px-4 py-2">
+                        Full Name
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {userData.FullName}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="border border-gray-300 px-4 py-2">
+                        Email
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {userData.Email}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="border border-gray-300 px-4 py-2">Role</td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {userData.role}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="border border-gray-300 px-4 py-2">
+                        Total Events
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {userData.totalEvents}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="border border-gray-300 px-4 py-2">
+                        Total Messages
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {userData.totalMessages}
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
-              ) : (
-                <p>No events available</p>
-              )}
-            </>
-          ) : (
-            <p>Loading user data...</p>
-          )}
+
+                <h3 className="text-xl font-bold mt-8 mb-4">Event Details</h3>
+                {userData.EventDetails.length > 0 ? (
+                  <table className="table-auto w-full border-collapse border border-gray-300">
+                    <thead>
+                      <tr className="bg-black">
+                        <th className="border border-gray-300 px-4 py-2 text-left">
+                          Event Title
+                        </th>
+                        <th className="border border-gray-300 px-4 py-2 text-left">
+                          Description
+                        </th>
+                        <th className="border border-gray-300 px-4 py-2 text-left">
+                          Date
+                        </th>
+                        <th className="border border-gray-300 px-4 py-2 text-left">
+                          Price
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {userData.EventDetails.map((event) => (
+                        <tr key={event._id}>
+                          <td className="border border-gray-300 px-4 py-2">
+                            {event.title}
+                          </td>
+                          <td className="border border-gray-300 px-4 py-2">
+                            {event.description}
+                          </td>
+                          <td className="border border-gray-300 px-4 py-2">
+                            {new Date(event.date).toLocaleDateString()}
+                          </td>
+                          <td className="border border-gray-300 px-4 py-2">
+                            {event.price}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <p>No events available</p>
+                )}
+              </>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      ) : (
+        <LoadingScreen />
+      )}
+    </>
   );
 };
 
