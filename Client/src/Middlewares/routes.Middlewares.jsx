@@ -11,11 +11,13 @@ const ProtectedRoute = ({ children, role }) => {
     return <Navigate to="/login" />;
   }
 
+  console.log("user?.user?.rolea", user.user.role);
   // Safely access role properties
-  const userRole = user?.user?.roleas || user?.data?.role;
+  const userRole = user?.user?.role || user?.data?.role;
   console.log("User role:", userRole);
 
   // Redirect to unauthorized page if role doesn't match
+  console.log("userRole", userRole);
   if (role && userRole !== role) {
     return <Navigate to="/unauthorized" />;
   }

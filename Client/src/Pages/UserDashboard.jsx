@@ -9,7 +9,7 @@ import placeholderImage from "../assets/handshake-4002834_1280.jpg";
 const UserDashboard = () => {
   const [userData, setUserData] = useState(null);
   const data = useSelector((state) => state.auth);
-
+  console.log(data);
   const fetchUserData = async () => {
     try {
       const res = await axios.get(
