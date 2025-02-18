@@ -16,7 +16,6 @@ export const authenticateToken =
     try {
       // Verify the token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
       // Attach the user data to the request
       req.user = decoded;
 

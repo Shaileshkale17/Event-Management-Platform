@@ -391,7 +391,6 @@ export const deleteUser = async (req, res, io) => {
 
 export const addMessageToUser = async (req, res, io) => {
   const { userId, messageId } = req.body;
-
   try {
     // Check if the user exists
     const user = await User.findById(userId);

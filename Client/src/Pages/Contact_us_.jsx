@@ -19,6 +19,7 @@ const Contact_us_ = () => {
   const [Phone, setPhone] = useState("");
   const [enquiry, setenquiry] = useState("");
   const [Messages, setMessages] = useState("");
+
   const data = useSelector((state) => state.auth);
   const { isLoggedIn } = useSelector((state) => state.auth);
   const ContectMessage = async (e) => {
@@ -41,9 +42,10 @@ const Contact_us_ = () => {
         }
       );
       if (isLoggedIn) {
+        console.log("res.data.data._id", res.data.data._id);
         let usermessage = await axios.post(
-          `${import.meta.env.VITE_BACKEND_URL}/users/addEvent`,
-          { userId: data.user.user.id, eventId: res.data.data._id },
+          `${import.meta.env.VITE_BACKEND_URL}/users/addMessage`,
+          { userId: data.user.user.id, messageId: res.data.data._id },
           {
             headers: {
               Authorization: `Bearer ${data.user.token}`,

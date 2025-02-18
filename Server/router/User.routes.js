@@ -57,7 +57,7 @@ router.post(
 // Add message to user's Messages
 router.post(
   "/users/addMessage",
-  authenticateToken(["employee", "admin", "subadmin"]),
+  authenticateToken(["User", "employee", "admin", "subadmin"]),
   (req, res) => addMessageToUser(req, res, req.app.locals.io)
 );
 

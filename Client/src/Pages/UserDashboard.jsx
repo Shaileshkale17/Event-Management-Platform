@@ -20,6 +20,7 @@ const UserDashboard = () => {
           },
         }
       );
+      console.log("res", res);
       setUserData(res.data.data);
     } catch (error) {
       const errorMessage =
