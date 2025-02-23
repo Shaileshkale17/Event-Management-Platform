@@ -92,7 +92,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-gray-700 text-white space-y-2 py-3 px-4">
+        <div className="md:hidden bg-black text-gray-300 hover:text-gray-400 space-y-2 py-3 px-4">
           <Link to="/" className="block hover:text-blue-400 hover:underline">
             Home
           </Link>
@@ -121,7 +121,7 @@ const Navbar = () => {
           {isLoggedIn ? (
             <button
               onClick={handleLogout}
-              className="block w-full text-left px-4 py-2 hover:text-gray-400 text-gray-300 rounded-lg  hover:underline">
+              className="block w-full text-left  py-2 hover:text-gray-400 text-gray-300 rounded-lg  hover:underline">
               Logout
             </button>
           ) : (
