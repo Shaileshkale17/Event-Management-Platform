@@ -5,11 +5,13 @@ import { AnimatePresence, useInView } from "framer-motion";
 const ImageMarquee = ({ imagesarr = [] }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
+  const inImageNotLoad =
+    "https://cdn0.weddingwire.in/article/0698/original/1280/jpg/118960-knotsbyamp-maharashtrianweddings1.webp";
   return (
     <div
       className="overflow-hidden w-full bg-black  pb-5  "
       ref={ref}
-      key={imagesarr.id || 1}>
+      key={imagesarr._id || 1}>
       <AnimatePresence mode="wait">
         {isInView && (
           <>
@@ -20,9 +22,9 @@ const ImageMarquee = ({ imagesarr = [] }) => {
               {imagesarr.map((image, index) => (
                 <EventCard
                   Title={image.title}
-                  image={image.image}
-                  id={image.id}
-                  linkURL={`event-Plan/${image.id}`}
+                  image={image.image || inImageNotLoad}
+                  id={image._id}
+                  linkURL={`event/${image._id}`}
                 />
               ))}
             </Marquee>

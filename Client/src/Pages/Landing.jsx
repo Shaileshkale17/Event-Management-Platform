@@ -7,9 +7,11 @@ import Slide_four from "../assets/pexels-asadphoto-169211.jpg";
 import Marquee from "../components/Marquee";
 import Testimonials from "../components/Testimonials";
 import Offerings from "../components/Offerings";
+import axios, { Axios } from "axios";
 
 const Landing = () => {
   const [arrSlides, setArrslides] = useState([]);
+  const [arrPalns, setArrPalns] = useState([]);
   const slides = [
     {
       id: 1,
@@ -37,47 +39,21 @@ const Landing = () => {
     },
   ];
 
-  const popularEventPlans = [
-    {
-      id: 1,
-      title: "Wedding Planning",
-      description:
-        "Our wedding planning services ensure your big day is stress-free and magical, from venue selection to managing vendors and timelines.",
-      image:
-        "https://cdn0.weddingwire.in/article/0698/original/1280/jpg/118960-knotsbyamp-maharashtrianweddings1.webp", // Unsplash image URL
-    },
-    {
-      id: 2,
-      title: "Corporate Events",
-      description:
-        "We specialize in planning professional corporate events, including conferences, seminars, product launches, and team-building activities.",
-      image:
-        "https://cdn0.weddingwire.in/article/0698/original/1280/jpg/118960-knotsbyamp-maharashtrianweddings1.webp", // Unsplash image URL
-    },
-    {
-      id: 3,
-      title: "Birthday Parties",
-      description:
-        "Make birthdays unforgettable with personalized themes, decorations, and entertainment, tailored to any age group.",
-      image: "https://images.unsplash.com/photo-1560807707-8cc77767d783", // Unsplash image URL
-    },
-    {
-      id: 4,
-      title: "Social Gatherings",
-      description:
-        "From family reunions to community events, we create memorable social gatherings with creative planning and seamless execution.",
-      image:
-        "https://cdn0.weddingwire.in/article/0698/original/1280/jpg/118960-knotsbyamp-maharashtrianweddings1.webp", // Unsplash image URL
-    },
-    {
-      id: 5,
-      title: "Festivals & Celebrations",
-      description:
-        "Celebrate festivals with grandeur by letting us handle the decor, catering, and event flow for a joyous experience.",
-      image:
-        "https://cdn0.weddingwire.in/article/0698/original/1280/jpg/118960-knotsbyamp-maharashtrianweddings1.webp", // Unsplash image URL
-    },
-  ];
+  const allevents = async () => {
+    try {
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/events`);
+      setArrPalns(res.data.data);
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        "Something went wrong. Please try again.";
+      toast.error(errorMessage);
+      console.error("Signup error:", error);
+    }
+  };
+  useEffect(() => {
+    allevents();
+  }, []);
 
   const Crad = [
     {
@@ -121,7 +97,7 @@ const Landing = () => {
   return (
     <div className="min-h-screen">
       <ImageSlider slides={arrSlides} />
-      <Marquee imagesarr={popularEventPlans} />
+      <Marquee imagesarr={arrPalns} />
       <Offerings />
       <Testimonials />
     </div>
