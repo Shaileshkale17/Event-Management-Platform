@@ -6,8 +6,8 @@ const ConnectionDb = async () => {
     const connectURL = await connect(process.env.COnnectURl);
     console.log("Connection Host Name :- ", connectURL.connection.host);
   } catch (error) {
-    exit(1);
     console.log(error);
+    process.exit(1);
   }
 };
 
