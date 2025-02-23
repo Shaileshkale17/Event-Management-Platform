@@ -1,5 +1,14 @@
 import mongoose, { Schema } from "mongoose";
-
+const EventBookingSchema = new mongoose.Schema(
+  {
+    eventId: {
+      type: Schema.Types.ObjectId,
+      ref: "Event",
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
 const UserSchema = new mongoose.Schema(
   {
     FullName: {
@@ -18,16 +27,17 @@ const UserSchema = new mongoose.Schema(
     Phone: {
       type: String,
     },
-    EventsBook: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Event",
-      },
-    ],
+    EventsBook: [EventBookingSchema],
     Messages: [
       {
         type: Schema.Types.ObjectId,
         ref: "Message",
+      },
+    ],
+    Executive: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Employee",
       },
     ],
     role: {
