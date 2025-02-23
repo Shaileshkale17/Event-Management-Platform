@@ -9,7 +9,7 @@ const ImageMarquee = ({ imagesarr = [] }) => {
     "https://cdn0.weddingwire.in/article/0698/original/1280/jpg/118960-knotsbyamp-maharashtrianweddings1.webp";
   return (
     <div
-      className="overflow-hidden w-full bg-black  pb-5  "
+      className="overflow-hidden w-full bg-black  pb-5"
       ref={ref}
       key={imagesarr._id || 1}>
       <AnimatePresence mode="wait">
@@ -24,7 +24,7 @@ const ImageMarquee = ({ imagesarr = [] }) => {
                   Title={image.title}
                   image={image.image || inImageNotLoad}
                   id={image._id}
-                  linkURL={`event/${image._id}`}
+                  linkURL={`/event/${image._id}`}
                 />
               ))}
             </Marquee>

@@ -69,7 +69,6 @@ const Testimonials = () => {
             Title={image.title}
             image={image.image}
             id={image.id}
-            linkURL={`/blog/${image.id}`}
             starRating={image.starRating}
           />
         ))}
