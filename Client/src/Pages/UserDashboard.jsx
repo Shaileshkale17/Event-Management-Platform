@@ -147,13 +147,13 @@ const UserDashboard = () => {
                             {event.description}
                           </td>
                           <td className="border border-gray-300 px-4 py-2">
-                            {new Date(event.date).toLocaleDateString()}
+                            {new Date(event.eventAddedAt).toLocaleDateString()}
                           </td>
                           <td className="border border-gray-300 px-4 py-2">
                             {event.price}
                           </td>
                         </tr>
-                      ))}
+                      )).reverse()}
                     </tbody>
                   </table>
                 ) : (

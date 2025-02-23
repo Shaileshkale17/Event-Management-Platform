@@ -51,6 +51,7 @@ const EventsInfo = () => {
   }, []);
 
   const handleInterest = async () => {
+    console.log("userId", { userId: data.user.user.id, eventId: API_data._id });
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/users/addEvent`,
@@ -61,6 +62,7 @@ const EventsInfo = () => {
           },
         }
       );
+      console.log(res);
       toast.success("Thank you for showing interest!");
     } catch (error) {
       const errorMessage =

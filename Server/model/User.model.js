@@ -4,7 +4,6 @@ const EventBookingSchema = new mongoose.Schema(
     eventId: {
       type: Schema.Types.ObjectId,
       ref: "Event",
-      required: true,
     },
   },
   { timestamps: true }

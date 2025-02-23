@@ -90,20 +90,109 @@ export const loginUser = async (req, res, io) => {
   }
 };
 
+// export const getAllUsers = async (req, res, io) => {
+//   try {
+//     const data = await User.aggregate([
+//       {
+//         $lookup: {
+//           from: "events", // The name of the collection for Events
+//           localField: "EventsBook.eventId",
+//           foreignField: "_id",
+//           as: "EventDetails",
+//           pipeline:""
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "messages", // The name of the collection for Messages
+//           localField: "Messages",
+//           foreignField: "_id",
+//           as: "MessageDetails",
+//         },
+//       },
+//       {
+//         $addFields: {
+//           totalEvents: { $size: "$EventDetails" }, // Count total events
+//           totalMessages: { $size: "$MessageDetails" }, // Count total messages
+//         },
+//       },
+//       {
+//         $project: {
+//           Password: 0, // Exclude sensitive data like password
+//         },
+//       },
+//     ]);
+//     io.emit("all_Users_retrieved", {
+//       message: "All Users have been retrieved",
+//       count: data.length, // Number of datas retrieved
+//       data: data, // Only send if necessary, depending on use case
+//     });
+//     return res.status(200).json({
+//       status: 200,
+//       data,
+//       message: "All users fetched successfully",
+//       success: true,
+//     });
+//   } catch (error) {
+//     return res.status(500).json({
+//       status: 500,
+//       error: error.message,
+//       message: "Server error",
+//       success: false,
+//     });
+//   }
+// };
 export const getAllUsers = async (req, res, io) => {
   try {
     const data = await User.aggregate([
+      // Unwind EventsBook to access timestamps
+      {
+        $unwind: {
+          path: "$EventsBook",
+          preserveNullAndEmptyArrays: true, // Include users without events
+        },
+      },
       {
         $lookup: {
-          from: "events", // The name of the collection for Events
-          localField: "EventsBook",
+          from: "events", // The actual collection name
+          localField: "EventsBook.eventId",
           foreignField: "_id",
           as: "EventDetails",
         },
       },
       {
+        $unwind: {
+          path: "$EventDetails",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $group: {
+          _id: "$_id",
+          FullName: { $first: "$FullName" },
+          Email: { $first: "$Email" },
+          Phone: { $first: "$Phone" },
+          role: { $first: "$role" },
+          image: { $first: "$image" },
+          cloudinary_public_id: { $first: "$cloudinary_public_id" },
+          Messages: { $first: "$Messages" },
+          userCreatedAt: { $first: "$createdAt" },
+          userUpdatedAt: { $first: "$updatedAt" },
+          // ✅ Store Event Details with timestamps
+          EventDetails: {
+            $push: {
+              _id: "$EventDetails._id",
+              title: "$EventDetails.title",
+              description: "$EventDetails.description",
+              eventAddedAt: "$EventsBook.createdAt",
+              eventUpdatedAt: "$EventsBook.updatedAt",
+            },
+          },
+        },
+      },
+      {
         $lookup: {
-          from: "messages", // The name of the collection for Messages
+          from: "messages",
           localField: "Messages",
           foreignField: "_id",
           as: "MessageDetails",
@@ -117,15 +206,17 @@ export const getAllUsers = async (req, res, io) => {
       },
       {
         $project: {
-          Password: 0, // Exclude sensitive data like password
+          Password: 0, // Exclude sensitive data
         },
       },
-    ]);
+    ]).sort({ userUpdatedAt: -1 });
+
     io.emit("all_Users_retrieved", {
       message: "All Users have been retrieved",
-      count: data.length, // Number of datas retrieved
-      data: data, // Only send if necessary, depending on use case
+      count: data.length,
+      data,
     });
+
     return res.status(200).json({
       status: 200,
       data,
@@ -141,6 +232,89 @@ export const getAllUsers = async (req, res, io) => {
     });
   }
 };
+
+// export const getUserById = async (req, res, io) => {
+//   const { id } = req.params;
+
+//   if (!id) {
+//     return res.status(400).json({
+//       status: 400,
+//       message: "User ID is required",
+//       success: false,
+//     });
+//   }
+
+//   try {
+//     const data = await User.aggregate([
+//       {
+//         $match: { _id: new mongoose.Types.ObjectId(id) }, // Match the user by ID
+//       },
+//       {
+//         $lookup: {
+//           from: "events", // The name of the "Event" collection
+//           localField: "EventsBook.eventId",
+//           foreignField: "_id",
+//           as: "EventDetails",
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "messages", // The name of the "Message" collection
+//           localField: "Messages",
+//           foreignField: "_id",
+//           as: "MessageDetails",
+//         },
+//       },
+//       {
+//         $addFields: {
+//           totalEvents: { $size: "$EventDetails" }, // Add total events count
+//           totalMessages: { $size: "$MessageDetails" }, // Add total messages count
+//         },
+//       },
+//       {
+//         $project: {
+//           Password: 0, // Exclude the Password field
+//         },
+//       },
+//     ]);
+
+//     if (!data || data.length === 0) {
+//       return res.status(404).json({
+//         status: 404,
+//         message: "User not found",
+//         success: false,
+//       });
+//     }
+
+//     io.emit("user_retrieved", {
+//       message: "User data has been retrieved",
+//       data: {
+//         id: data[0]._id,
+//         FullName: data[0].FullName,
+//         Email: data[0].Email,
+//         Phone: data[0].Phone,
+//         empType: data[0].empType,
+//         role: data[0].role,
+//         salary: data[0].salary,
+//         image: data[0].image,
+//       },
+//     });
+
+//     return res.status(200).json({
+//       status: 200,
+//       data: data[0],
+//       message: "User fetched successfully",
+//       success: true,
+//     });
+//   } catch (error) {
+//     return res.status(500).json({
+//       status: 500,
+//       error: error.message,
+//       message: "Server error",
+//       success: false,
+//     });
+//   }
+// };
 
 export const getUserById = async (req, res, io) => {
   const { id } = req.params;
@@ -159,16 +333,51 @@ export const getUserById = async (req, res, io) => {
         $match: { _id: new mongoose.Types.ObjectId(id) }, // Match the user by ID
       },
       {
+        $unwind: {
+          path: "$EventsBook",
+          preserveNullAndEmptyArrays: true, // Keep users with no events
+        },
+      },
+      {
         $lookup: {
-          from: "events", // The name of the "Event" collection
-          localField: "EventsBook",
+          from: "events", // The "Event" collection
+          localField: "EventsBook.eventId",
           foreignField: "_id",
           as: "EventDetails",
         },
       },
       {
+        $unwind: {
+          path: "$EventDetails",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $group: {
+          _id: "$_id",
+          FullName: { $first: "$FullName" },
+          Email: { $first: "$Email" },
+          Phone: { $first: "$Phone" },
+          role: { $first: "$role" },
+          image: { $first: "$image" },
+          Messages: { $first: "$Messages" },
+          userCreatedAt: { $first: "$createdAt" },
+          userUpdatedAt: { $first: "$updatedAt" },
+          EventDetails: {
+            $push: {
+              _id: "$EventDetails._id",
+              title: "$EventDetails.title",
+              description: "$EventDetails.description",
+              price: "$EventDetails.price",
+              eventAddedAt: "$EventsBook.createdAt",
+              eventUpdatedAt: "$EventsBook.updatedAt",
+            },
+          },
+        },
+      },
+      {
         $lookup: {
-          from: "messages", // The name of the "Message" collection
+          from: "messages",
           localField: "Messages",
           foreignField: "_id",
           as: "MessageDetails",
@@ -176,13 +385,13 @@ export const getUserById = async (req, res, io) => {
       },
       {
         $addFields: {
-          totalEvents: { $size: "$EventDetails" }, // Add total events count
-          totalMessages: { $size: "$MessageDetails" }, // Add total messages count
+          totalEvents: { $size: "$EventDetails" }, // Count total events
+          totalMessages: { $size: "$MessageDetails" }, // Count total messages
         },
       },
       {
         $project: {
-          Password: 0, // Exclude the Password field
+          Password: 0, // Exclude sensitive data
         },
       },
     ]);
@@ -197,16 +406,7 @@ export const getUserById = async (req, res, io) => {
 
     io.emit("user_retrieved", {
       message: "User data has been retrieved",
-      data: {
-        id: data[0]._id,
-        FullName: data[0].FullName,
-        Email: data[0].Email,
-        Phone: data[0].Phone,
-        empType: data[0].empType,
-        role: data[0].role,
-        salary: data[0].salary,
-        image: data[0].image,
-      },
+      data: data[0],
     });
 
     return res.status(200).json({
@@ -422,10 +622,12 @@ export const addMessageToUser = async (req, res, io) => {
 };
 export const addEventToUser = async (req, res, io) => {
   const { userId, eventId } = req.body;
+  console.log("userId, eventId", userId, eventId);
 
   try {
     // Check if the user exists
     const user = await User.findById(userId);
+    console.log(user);
     if (!user) {
       return res.status(404).json({
         status: 404,
@@ -433,11 +635,11 @@ export const addEventToUser = async (req, res, io) => {
         success: false,
       });
     }
-
     // Add event to the user's EventsBook array
     user.EventsBook.push({
       eventId: new mongoose.Types.ObjectId(eventId),
     });
+
     await user.save();
 
     return res.status(200).json({
