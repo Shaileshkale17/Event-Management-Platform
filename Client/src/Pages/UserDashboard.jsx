@@ -61,17 +61,17 @@ const UserDashboard = () => {
             </h1>
           </div>
 
-          <div className="container mx-auto py-12 px-8">
-            <div className="text-gray-300 shadow-lg rounded-lg p-6">
+          <div className="container mx-auto py-12 px-3 md:px-8">
+            <div className="text-gray-300 shadow-lg rounded-lg md:p-6">
               <>
                 <h2 className="text-2xl font-bold mb-6">User Information</h2>
-                <table className="table-auto w-full border-collapse border border-gray-300">
+                <table className="table-auto w-full border-collapse border border-gray-300 text-xs md:text-lg ">
                   <thead>
                     <tr className="bg-black">
-                      <th className="border border-gray-300 px-4 py-2 text-left">
+                      <th className="border border-gray-300 px-4 py-2 text-center md:text-left">
                         Field
                       </th>
-                      <th className="border border-gray-300 px-4 py-2 text-left">
+                      <th className="border border-gray-300 px-4 py-2 text-center md:text-left">
                         Value
                       </th>
                     </tr>
@@ -111,7 +111,7 @@ const UserDashboard = () => {
                       <td className="border border-gray-300 px-4 py-2">
                         Total Messages
                       </td>
-                      <td className="border border-gray-300 px-4 py-2">
+                      <td className="border border-gray-300  px-4 py-2">
                         {userData.totalMessages}
                       </td>
                     </tr>
@@ -120,19 +120,19 @@ const UserDashboard = () => {
 
                 <h3 className="text-xl font-bold mt-8 mb-4">Event Details</h3>
                 {userData.EventDetails.length > 0 ? (
-                  <table className="table-auto w-full border-collapse border border-gray-300">
+                  <table className="table-auto w-full border-collapse border border-gray-300 text-xs md:text-lg ">
                     <thead>
                       <tr className="bg-black">
-                        <th className="border border-gray-300 px-4 py-2 text-left">
+                        <th className="border border-gray-300 px-4 md:py-2 text-center  md:text-left">
                           Event Title
                         </th>
-                        <th className="border border-gray-300 px-4 py-2 text-left">
+                        <th className="border border-gray-300 px-4 md:py-2 text-center md:text-left">
                           Description
                         </th>
-                        <th className="border border-gray-300 px-4 py-2 text-left">
+                        <th className="border border-gray-300 px-4 md:py-2 text-center md:text-left">
                           Date
                         </th>
-                        <th className="border border-gray-300 px-4 py-2 text-left">
+                        <th className="border border-gray-300 px-4 md:py-2 text-center md:text-left">
                           Price
                         </th>
                       </tr>
@@ -140,16 +140,16 @@ const UserDashboard = () => {
                     <tbody>
                       {userData.EventDetails.map((event) => (
                         <tr key={event._id}>
-                          <td className="border border-gray-300 px-4 py-2">
+                          <td className="border border-gray-300 md:px-4 py-2 text-center md:text-left">
                             {event.title}
                           </td>
-                          <td className="border border-gray-300 px-4 py-2">
+                          <td className="border border-gray-300 md:px-4 py-2 text-center md:text-left">
                             {event.description}
                           </td>
-                          <td className="border border-gray-300 px-4 py-2">
+                          <td className="border border-gray-300 md:px-4 py-2 text-center md:text-left">
                             {new Date(event.eventAddedAt).toLocaleDateString()}
                           </td>
-                          <td className="border border-gray-300 px-4 py-2">
+                          <td className="border border-gray-300 md:px-4 py-2 text-center md:text-left">
                             {event.price}
                           </td>
                         </tr>
