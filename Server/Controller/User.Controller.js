@@ -144,7 +144,6 @@ export const getAllUsers = async (req, res, io) => {
 
 export const getUserById = async (req, res, io) => {
   const { id } = req.params;
-  console.log(id);
 
   if (!id) {
     return res.status(400).json({
@@ -436,7 +435,9 @@ export const addEventToUser = async (req, res, io) => {
     }
 
     // Add event to the user's EventsBook array
-    user.EventsBook.push(eventId);
+    user.EventsBook.push({
+      eventId: new mongoose.Types.ObjectId(eventId),
+    });
     await user.save();
 
     return res.status(200).json({
