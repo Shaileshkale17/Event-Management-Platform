@@ -88,10 +88,10 @@ const Contact_us_ = () => {
             <p>Say something to start a live chat!</p>
             <div className="space-y-4">
               <p>
-                <i className="fas fa-phone-alt"></i> +1012 3456 789
+                <i className="fas fa-phone-alt"></i> +91 9923110630
               </p>
               <p>
-                <i className="fas fa-envelope"></i> demo@gmail.com
+                <i className="fas fa-envelope"></i> shaileshkale87730@gmail.com
               </p>
               <p>
                 <i className="fas fa-map-marker-alt"></i> 132 Dartmouth Street
@@ -99,9 +99,19 @@ const Contact_us_ = () => {
               </p>
             </div>
             <div className="flex space-x-4 ">
-              <i className="fab fa-twitter cursor-pointer"></i>
-              <i className="fab fa-instagram cursor-pointer"></i>
-              <i className="fab fa-discord cursor-pointer"></i>
+              <a
+                href="https://x.com/Shaileshkale123?t=nD5Bwc4AdZ3zEbgoF__r0A&s=09"
+                target="_blank">
+                <i className="fab fa-twitter cursor-pointer"></i>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/shailesh-kale-0b1236228"
+                target="_blank">
+                <i className="fab fa-linkedin cursor-pointer"></i>
+              </a>
+              <a href="https://discord.com/invite/6xNbk48w" target="_blank">
+                <i className="fab fa-discord cursor-pointer"></i>
+              </a>
             </div>
           </div>
 
