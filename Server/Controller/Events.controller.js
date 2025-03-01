@@ -12,33 +12,34 @@ export const createEvent = async (req, res, io) => {
     await ConnectCloudinary();
 
     // Extract the image path from req.files
-    // const imageUrlLocalPath = req.files?.imageUrl?.[0]?.path;
-    // if (!imageUrlLocalPath) {
-    //   return res.status(400).json({
-    //     status: 400,
-    //     message: "Image is required for creating an event",
-    //     success: false,
-    //   });
-    // }
-    // console.log("imageUrlLocalPath:", imageUrlLocalPath);
+    const imageUrlLocalPath = req.files?.imageUrl?.[0]?.path;
+    if (!imageUrlLocalPath) {
+      return res.status(400).json({
+        status: 400,
+        message: "Image is required for creating an event",
+        success: false,
+      });
+    }
+
+    console.log("imageUrlLocalPath:", imageUrlLocalPath);
 
     // Upload the image to Cloudinary
-    // const result = await cloudinary.uploader.upload(imageUrlLocalPath, {
-    //   resource_type: "image",
-    // });
-
+    const result = await cloudinary.uploader.upload(imageUrlLocalPath, {
+      resource_type: "image",
+    });
+    console.log("res", result);
     // Create the event in the database
     const newEvent = await Event.create({
       title,
       description,
-      // imageUrl: result.secure_url,
-      // cloudinary_public_id: result.public_id,
+      imageUrl: result.secure_url,
+      cloudinary_public_id: result.public_id,
       tags,
       date,
       price,
       packages: packages, // Parse packages if sent as a JSON string
     });
-    // console.log(newEvent);
+    console.log(newEvent);
     if (!newEvent) {
       return res.status(400).json({
         status: 400,

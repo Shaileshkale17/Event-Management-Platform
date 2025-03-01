@@ -3,23 +3,21 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import placeholderImage from "../assets/handshake-4002834_1280.jpg";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const MainDashboard = () => {
   const [userData, setUserData] = useState(null);
   const [messages, setMessages] = useState([]);
   const [inquiries, setInquiries] = useState([]);
   const [events, setEvents] = useState([]);
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YThjMDFlZjE4N2ZmYmU3MWJmM2ZkYSIsInJvbGUiOiJlbXBsb3llZSIsImlhdCI6MTczOTEyNTkzOH0.lIeEdff_yvB5rXoC8lM2dWBh-aLJPpMxwzGFkxMjLn8";
+  const data = useSelector((state) => state.auth);
 
   const fetchUserData = async () => {
     try {
       const response = await axios.get(
-        `${
-          import.meta.env.VITE_BACKEND_URL
-        }/employees/67a7725704afcbbdc5824f58`,
+        `${import.meta.env.VITE_BACKEND_URL}/employees/${data?.user?.data?.id}`,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${data?.user?.token}` },
         }
       );
       setUserData(response.data.data);
@@ -34,7 +32,7 @@ const MainDashboard = () => {
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/info/message`,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${data?.user?.token}` },
         }
       );
       setMessages(response.data);
@@ -44,46 +42,43 @@ const MainDashboard = () => {
   };
 
   const fetchEventInquiries = async () => {
+    console.log(`Bearer ${data?.user?.token}`);
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/info/events`,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${data?.user?.token}` },
         }
       );
-      console.log(response.data.users);
       setInquiries(response.data.users);
-      console.log(
-        "response.data.users.EventsBook",
-        response.data.users[0].EventsBook
-      );
-      // setEvents(response.data.users.packages);
     } catch (error) {
       toast.error("Error fetching event inquiries.");
     }
   };
 
-  // const fetchEventPackages = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `${import.meta.env.VITE_BACKEND_URL}/events/packages`,
-  //       {
-  //         headers: { Authorization: `Bearer ${token}` },
-  //       }
-  //     );
-  //     setEvents(response.data.events);
-  //   } catch (error) {
-  //     toast.error("Error fetching event packages.");
-  //   }
-  // };
+  const fetchEventPackages = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/events/packages`,
+        {
+          headers: { Authorization: `Bearer ${data?.user?.token}` },
+        }
+      );
+      setEvents(response.data.events ?? []);
+    } catch (error) {
+      toast.error("Error fetching event packages.");
+    }
+  };
 
   useEffect(() => {
-    fetchUserData();
-    fetchMessages();
-    fetchEventInquiries();
-    // fetchEventPackages();
-  }, []);
-
+    if (data?.user?.token) {
+      fetchUserData();
+      fetchMessages();
+      fetchEventInquiries();
+      // fetchEventPackages();
+    }
+  }, [data]);
+  console.log("Inquiries", inquiries);
   return (
     <div className="min-h-screen">
       <div
@@ -130,25 +125,25 @@ const MainDashboard = () => {
                       Full Name
                     </td>
                     <td className="border border-gray-300 px-4 py-2">
-                      {userData.name}
+                      {userData?.name}
                     </td>
                   </tr>
                   <tr>
                     <td className="border border-gray-300 px-4 py-2">Email</td>
                     <td className="border border-gray-300 px-4 py-2">
-                      {userData.email}
+                      {userData?.email}
                     </td>
                   </tr>
                   <tr>
                     <td className="border border-gray-300 px-4 py-2">Role</td>
                     <td className="border border-gray-300 px-4 py-2">
-                      {userData.role}
+                      {userData?.role}
                     </td>
                   </tr>
                   <tr>
                     <td className="border border-gray-300 px-4 py-2">Salary</td>
                     <td className="border border-gray-300 px-4 py-2">
-                      ₹{userData.salary.toLocaleString()}
+                      ₹{userData?.salary?.toLocaleString()}
                     </td>
                   </tr>
                   <tr>
@@ -156,7 +151,7 @@ const MainDashboard = () => {
                       Joining Date
                     </td>
                     <td className="border border-gray-300 px-4 py-2">
-                      {new Date(userData.joiningDate).toLocaleDateString()}
+                      {new Date(userData?.joiningDate)?.toLocaleDateString()}
                     </td>
                   </tr>
                   <tr>
@@ -164,7 +159,7 @@ const MainDashboard = () => {
                       Employment Type
                     </td>
                     <td className="border border-gray-300 px-4 py-2">
-                      {userData.empType}
+                      {userData?.empType}
                     </td>
                   </tr>
                   <tr>
@@ -172,7 +167,7 @@ const MainDashboard = () => {
                       Location
                     </td>
                     <td className="border border-gray-300 px-4 py-2">
-                      {userData.location}
+                      {userData?.location}
                     </td>
                   </tr>
                 </tbody>
@@ -187,7 +182,7 @@ const MainDashboard = () => {
           <h2 className="text-2xl font-bold mb-6">User Messages</h2>
           {messages.length > 0 ? (
             <ul className="space-y-4">
-              {messages.map((message, index) => (
+              {messages?.map((message, index) => (
                 <li
                   key={index}
                   className="border border-gray-300 p-4 rounded-md">
@@ -255,25 +250,31 @@ const MainDashboard = () => {
             inquiries.map((inquiry, inquiryIndex) => (
               <div key={inquiryIndex} className="mb-8">
                 <h3 className="text-xl font-semibold mb-4">
-                  Bookings for {inquiry.FullName} ({inquiry.Email})
+                  Bookings for {inquiry?.FullName} ({inquiry?.Email})
                 </h3>
-                {inquiry.EventsBook && inquiry.EventsBook.length > 0 ? (
-                  inquiry.EventsBook.map((event, eventIndex) => (
+                {inquiry?.EventDetails && inquiry?.EventDetails?.length > 0 ? (
+                  inquiry?.EventDetails?.map((event, eventIndex) => (
                     <div key={eventIndex} className="mb-8">
                       <h4 className="text-lg font-bold mb-2">
-                        {eventIndex + 1}. {event.title}
+                        {eventIndex + 1}. {event?.title}
                       </h4>
                       <p className="text-gray-600 mb-2">
-                        <strong>Description:</strong> {event.description}
+                        <strong>Description:</strong> {event?.description}
                       </p>
                       <p className="text-gray-600 mb-2">
                         <strong>Tags:</strong> {event.tags?.join(", ") || "N/A"}
                       </p>
                       <p className="text-gray-600 mb-4">
                         <strong>Price:</strong> ₹
-                        {event.price?.toLocaleString() || "N/A"}
+                        {event?.price?.toLocaleString() || "N/A"}
                       </p>
-                      {event.packages && event.packages.length > 0 ? (
+                      {event?.packages && event?.packages?.length > 0 ? (
+                        (console.log(
+                          `Event ${eventIndex + 1} Packages:`,
+                          event?.packages
+                        ),
+                        {
+                          /*
                         <table className="table-auto w-full border-collapse border border-gray-300">
                           <thead>
                             <tr className="bg-gray-200">
@@ -289,22 +290,24 @@ const MainDashboard = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {event.packages.map((pkg, pkgIndex) => (
+                            {event?.packages?.map((pkg, pkgIndex) => (
                               <tr key={pkgIndex}>
                                 <td className="border border-gray-300 px-4 py-2">
-                                  {pkg.name}
+                                  {pkg?.name}
                                 </td>
                                 <td className="border border-gray-300 px-4 py-2">
-                                  ₹{pkg.price?.toLocaleString() || "N/A"}
+                                  ₹{pkg?.price?.toLocaleString() || "N/A"}
                                 </td>
                                 <td className="border border-gray-300 px-4 py-2">
-                                  {pkg.features?.join(", ") ||
+                                  {pkg?.features?.join(", ") ||
                                     "No features listed"}
                                 </td>
                               </tr>
                             ))}
                           </tbody>
                         </table>
+                        */
+                        })
                       ) : (
                         <p>No packages available for this event.</p>
                       )}
