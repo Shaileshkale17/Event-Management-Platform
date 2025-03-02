@@ -58,12 +58,12 @@ export const getUsersWithBookedEvents = async (req, res) => {
       {
         $unwind: {
           path: "$EventsBook",
-          preserveNullAndEmptyArrays: true, // Include users without events
+          preserveNullAndEmptyArrays: true,
         },
       },
       {
         $lookup: {
-          from: "events", // The actual collection name in MongoDB
+          from: "events",
           localField: "EventsBook.eventId",
           foreignField: "_id",
           as: "EventDetails",
@@ -88,10 +88,11 @@ export const getUsersWithBookedEvents = async (req, res) => {
           EventsBook: { $push: "$EventsBook" },
           createdAt: { $first: "$createdAt" },
           updatedAt: { $first: "$updatedAt" },
-          // EventDetails: { $push: { $ifNull: ["$EventDetails", []] } }, // Ensure array
+          EventDetails: { $push: { $ifNull: ["$EventDetails", []] } },
         },
       },
     ]);
+
     req.io.emit("usersWithBookedEvents", users);
     res.status(200).json({ success: true, users });
   } catch (error) {

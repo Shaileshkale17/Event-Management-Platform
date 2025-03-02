@@ -35,14 +35,14 @@ const MainDashboard = () => {
           headers: { Authorization: `Bearer ${data?.user?.token}` },
         }
       );
-      setMessages(response.data);
+      // console.log("message", response.data.users);
+      setMessages(response.data.users);
     } catch (error) {
       toast.error("Error fetching messages.");
     }
   };
 
   const fetchEventInquiries = async () => {
-    console.log(`Bearer ${data?.user?.token}`);
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/info/events`,
@@ -50,6 +50,7 @@ const MainDashboard = () => {
           headers: { Authorization: `Bearer ${data?.user?.token}` },
         }
       );
+      console.log("API Response:", response.data); // Debugging
       setInquiries(response.data.users);
     } catch (error) {
       toast.error("Error fetching event inquiries.");
@@ -78,7 +79,7 @@ const MainDashboard = () => {
       // fetchEventPackages();
     }
   }, [data]);
-  console.log("Inquiries", inquiries);
+  console.log("Inquiries", messages);
   return (
     <div className="min-h-screen">
       <div
@@ -95,9 +96,9 @@ const MainDashboard = () => {
             <>
               <div className="flex flex-row flex-wrap justify-between">
                 <h2 className="text-2xl font-bold mb-6">Admin Information</h2>
-                <div>
+                <div className="flex flex-row flex-wrap gap-3 text-xl ">
                   <button
-                    className="text-2xl font-bold mb-6 cursor-pointer"
+                    className=" font-bold mb-6 cursor-pointer"
                     onClick={() => {}}>
                     Add Employees
                   </button>
@@ -178,29 +179,53 @@ const MainDashboard = () => {
           )}
         </div>
         {/* Messages */}
-        <div className="bg-white shadow-lg rounded-lg p-6 mt-8">
+        <div className="bg-white shadow-lg rounded-lg p-6 mt-8 overflow-x-auto">
           <h2 className="text-2xl font-bold mb-6">User Messages</h2>
           {messages.length > 0 ? (
-            <ul className="space-y-4">
-              {messages?.map((message, index) => (
-                <li
-                  key={index}
-                  className="border border-gray-300 p-4 rounded-md">
-                  <p>
-                    <strong>Enquiry:</strong> {message?.enquiry}
-                  </p>
-                  <p>
-                    <strong>Message:</strong> {message?.Messages || "N/A"}
-                  </p>
-                  <p>
-                    <strong>Email:</strong> {message?.Email}
-                  </p>
-                  <p>
-                    <strong>Phone:</strong> {message?.Phone}
-                  </p>
-                </li>
-              ))}
-            </ul>
+            <table className="w-full border-collapse border border-gray-300">
+              <thead>
+                <tr className="bg-gray-200">
+                  <th className="border border-gray-300 px-4 py-2">
+                    First Name
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2">
+                    Last Name
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2">Enquiry</th>
+                  <th className="border border-gray-300 px-4 py-2">Message</th>
+                  <th className="border border-gray-300 px-4 py-2">Email</th>
+                  <th className="border border-gray-300 px-4 py-2">Phone</th>
+                </tr>
+              </thead>
+              <tbody>
+                {messages?.map((user, userIndex) =>
+                  user.Messages?.map((message, msgIndex) => (
+                    <tr
+                      key={`${userIndex}-${msgIndex}`}
+                      className="hover:bg-gray-100">
+                      <td className="border border-gray-300 px-4 py-2">
+                        {message?.FirstName}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {message?.LastName}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {message?.enquiry}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {message?.Messages || "N/A"}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {message?.Email}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {message?.Phone}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
           ) : (
             <p>No messages found.</p>
           )}
@@ -252,29 +277,25 @@ const MainDashboard = () => {
                 <h3 className="text-xl font-semibold mb-4">
                   Bookings for {inquiry?.FullName} ({inquiry?.Email})
                 </h3>
-                {inquiry?.EventDetails && inquiry?.EventDetails?.length > 0 ? (
-                  inquiry?.EventDetails?.map((event, eventIndex) => (
+                {inquiry?.EventDetails && inquiry?.EventDetails.length > 0 ? (
+                  inquiry?.EventDetails.map((event, eventIndex) => (
                     <div key={eventIndex} className="mb-8">
                       <h4 className="text-lg font-bold mb-2">
-                        {eventIndex + 1}. {event?.title}
+                        {eventIndex + 1}. {event?.title || "Unnamed Event"}
                       </h4>
                       <p className="text-gray-600 mb-2">
-                        <strong>Description:</strong> {event?.description}
+                        <strong>Description:</strong>{" "}
+                        {event?.description || "No description available"}
                       </p>
                       <p className="text-gray-600 mb-2">
-                        <strong>Tags:</strong> {event.tags?.join(", ") || "N/A"}
+                        <strong>Tags:</strong>{" "}
+                        {event?.tags?.join(", ") || "No tags"}
                       </p>
                       <p className="text-gray-600 mb-4">
                         <strong>Price:</strong> ₹
                         {event?.price?.toLocaleString() || "N/A"}
                       </p>
-                      {event?.packages && event?.packages?.length > 0 ? (
-                        (console.log(
-                          `Event ${eventIndex + 1} Packages:`,
-                          event?.packages
-                        ),
-                        {
-                          /*
+                      {event?.packages && event?.packages.length > 0 ? (
                         <table className="table-auto w-full border-collapse border border-gray-300">
                           <thead>
                             <tr className="bg-gray-200">
@@ -290,7 +311,7 @@ const MainDashboard = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {event?.packages?.map((pkg, pkgIndex) => (
+                            {event?.packages.map((pkg, pkgIndex) => (
                               <tr key={pkgIndex}>
                                 <td className="border border-gray-300 px-4 py-2">
                                   {pkg?.name}
@@ -306,15 +327,13 @@ const MainDashboard = () => {
                             ))}
                           </tbody>
                         </table>
-                        */
-                        })
                       ) : (
                         <p>No packages available for this event.</p>
                       )}
                     </div>
                   ))
                 ) : (
-                  <p>No events booked yet for {inquiry.FullName}.</p>
+                  <p>No events booked yet for {inquiry?.FullName}.</p>
                 )}
               </div>
             ))
