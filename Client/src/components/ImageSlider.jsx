@@ -1,10 +1,38 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-
-const ImageSlider = ({ slides = [] }) => {
+import Slide_One from "../assets/Events_image.jpg";
+import Slide_Two from "../assets/awesome-sauce-creative-uRWekN5S39g-unsplash.jpg";
+import Slide_Three from "../assets/awesome-sauce-creative-lvZN2e4LPvg-unsplash.jpg";
+import Slide_four from "../assets/pexels-asadphoto-169211.jpg";
+const ImageSlider = ({}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const slides = [
+    {
+      id: 1,
+      image: Slide_One,
+      title: "Live Events",
+      text: "Experience unforgettable live events with seamless management and coordination.",
+    },
+    {
+      id: 2,
+      image: Slide_Two,
+      title: "Engagement Events",
+      text: "Celebrate love and commitment with beautifully organized engagement ceremonies.",
+    },
+    {
+      id: 3,
+      image: Slide_Three,
+      title: "Haldi Events",
+      text: "Bring traditions to life with vibrant Haldi celebrations tailored to perfection.",
+    },
+    {
+      id: 4,
+      image: Slide_four,
+      title: "Destination Weddings",
+      text: "Turn your dream destination wedding into reality with our expert planning.",
+    },
+  ];
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex((prevIndex) =>

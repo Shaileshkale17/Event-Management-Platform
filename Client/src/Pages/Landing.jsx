@@ -10,34 +10,8 @@ import Offerings from "../components/Offerings";
 import axios, { Axios } from "axios";
 
 const Landing = () => {
-  const [arrSlides, setArrslides] = useState([]);
+  // const [arrSlides, setArrslides] = useState([]);
   const [arrPalns, setArrPalns] = useState([]);
-  const slides = [
-    {
-      id: 1,
-      image: Slide_One,
-      title: "Live Events",
-      text: "Experience unforgettable live events with seamless management and coordination.",
-    },
-    {
-      id: 2,
-      image: Slide_Two,
-      title: "Engagement Events",
-      text: "Celebrate love and commitment with beautifully organized engagement ceremonies.",
-    },
-    {
-      id: 3,
-      image: Slide_Three,
-      title: "Haldi Events",
-      text: "Bring traditions to life with vibrant Haldi celebrations tailored to perfection.",
-    },
-    {
-      id: 4,
-      image: Slide_four,
-      title: "Destination Weddings",
-      text: "Turn your dream destination wedding into reality with our expert planning.",
-    },
-  ];
 
   const allevents = async () => {
     try {
@@ -90,13 +64,9 @@ const Landing = () => {
     },
   ];
 
-  useEffect(() => {
-    setArrslides(slides);
-  }, []);
-
   return (
     <div className="min-h-screen">
-      <ImageSlider slides={arrSlides} />
+      <ImageSlider />
       <Marquee imagesarr={arrPalns} />
       <Offerings />
       <Testimonials />
